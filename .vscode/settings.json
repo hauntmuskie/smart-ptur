@@ -1,0 +1,11 @@
+{
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports.biome": "explicit",
+    "source.fixAll.biome": "explicit"
+  },
+  "workbench.editor.customLabels.patterns": {
+    "**/app/**/{page,layout,index}.{ts,tsx}": "(${dirname})/${filename}.${extname}",
+    "**/index.{ts,tsx}": "${dirname}/index.${extname}"
+  }
+}
