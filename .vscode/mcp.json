@@ -1,8 +1,8 @@
 {
   "servers": {
     "shadcn": {
-      "command": "npx",
-      "args": ["shadcn@latest", "mcp"]
+      "command": "bunx",
+      "args": ["--b", "shadcn@latest", "mcp"]
     }
   }
 }

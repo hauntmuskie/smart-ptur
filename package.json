@@ -8,7 +8,7 @@
     "start": "bun --b next start --turbopack",
     "lint": "bunx --b biome check",
     "format": "bunx --b biome format --write",
-    "typecheck": "bun --b tsgo --noEmit"
+    "typecheck": "bunx --b tsgo --noEmit"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
