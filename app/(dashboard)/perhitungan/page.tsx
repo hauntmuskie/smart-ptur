@@ -142,26 +142,28 @@ export default async function PerhitunganPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                scoreList.map(({ score, employee }) => (
-                  <TableRow key={score.id}>
+                scoreList.map(({ scores, employees }) => (
+                  <TableRow key={scores.id}>
                     <TableCell>
-                      <Badge variant="outline">{employee.kodeAlternatif}</Badge>
+                      <Badge variant="outline">
+                        {employees.kodeAlternatif}
+                      </Badge>
                     </TableCell>
                     <TableCell className="font-medium">
-                      {employee.namaLengkap}
+                      {employees.namaLengkap}
                     </TableCell>
-                    <TableCell>{employee.departemen}</TableCell>
+                    <TableCell>{employees.departemen}</TableCell>
                     <TableCell className="text-center">
-                      {score.k1Score}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {score.k2Score}
+                      {scores.k1Score}
                     </TableCell>
                     <TableCell className="text-center">
-                      {score.k3Score}
+                      {scores.k2Score}
                     </TableCell>
                     <TableCell className="text-center">
-                      {score.k4Score}
+                      {scores.k3Score}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {scores.k4Score}
                     </TableCell>
                   </TableRow>
                 ))
@@ -171,7 +173,7 @@ export default async function PerhitunganPage() {
         </CardContent>
       </Card>
 
-      {scoreList.some((s) => s.score.totalScore) && (
+      {scoreList.some((s) => s.scores.totalScore) && (
         <>
           <Card>
             <CardHeader>
@@ -193,27 +195,27 @@ export default async function PerhitunganPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {scoreList.map(({ score, employee }) => (
-                    <TableRow key={score.id}>
+                  {scoreList.map(({ scores, employees }) => (
+                    <TableRow key={scores.id}>
                       <TableCell>
                         <Badge variant="outline">
-                          {employee.kodeAlternatif}
+                          {employees.kodeAlternatif}
                         </Badge>
                       </TableCell>
                       <TableCell className="font-medium">
-                        {employee.namaLengkap}
+                        {employees.namaLengkap}
                       </TableCell>
                       <TableCell className="text-center">
-                        {parseFloat(score.k1Normalized || "0").toFixed(4)}
+                        {parseFloat(scores.k1Normalized || "0").toFixed(4)}
                       </TableCell>
                       <TableCell className="text-center">
-                        {parseFloat(score.k2Normalized || "0").toFixed(4)}
+                        {parseFloat(scores.k2Normalized || "0").toFixed(4)}
                       </TableCell>
                       <TableCell className="text-center">
-                        {parseFloat(score.k3Normalized || "0").toFixed(4)}
+                        {parseFloat(scores.k3Normalized || "0").toFixed(4)}
                       </TableCell>
                       <TableCell className="text-center">
-                        {parseFloat(score.k4Normalized || "0").toFixed(4)}
+                        {parseFloat(scores.k4Normalized || "0").toFixed(4)}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -244,38 +246,39 @@ export default async function PerhitunganPage() {
                 <TableBody>
                   {[...scoreList]
                     .sort(
-                      (a, b) => (a.score.ranking || 0) - (b.score.ranking || 0),
+                      (a, b) =>
+                        (a.scores.ranking || 0) - (b.scores.ranking || 0),
                     )
-                    .map(({ score, employee }) => (
-                      <TableRow key={score.id}>
+                    .map(({ scores, employees }) => (
+                      <TableRow key={scores.id}>
                         <TableCell className="text-center font-bold">
-                          #{score.ranking}
+                          #{scores.ranking}
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline">
-                            {employee.kodeAlternatif}
+                            {employees.kodeAlternatif}
                           </Badge>
                         </TableCell>
                         <TableCell className="font-medium">
-                          {employee.namaLengkap}
+                          {employees.namaLengkap}
                         </TableCell>
-                        <TableCell>{employee.departemen}</TableCell>
+                        <TableCell>{employees.departemen}</TableCell>
                         <TableCell className="text-center font-semibold">
-                          {parseFloat(score.totalScore || "0").toFixed(4)}
+                          {parseFloat(scores.totalScore || "0").toFixed(4)}
                         </TableCell>
                         <TableCell className="text-center">
                           <Badge
                             variant={
-                              score.grade === "sangat_baik"
+                              scores.grade === "sangat_baik"
                                 ? "default"
-                                : score.grade === "baik"
+                                : scores.grade === "baik"
                                   ? "secondary"
                                   : "destructive"
                             }
                           >
-                            {score.grade === "sangat_baik"
+                            {scores.grade === "sangat_baik"
                               ? "Sangat Baik"
-                              : score.grade === "baik"
+                              : scores.grade === "baik"
                                 ? "Baik"
                                 : "Kurang"}
                           </Badge>

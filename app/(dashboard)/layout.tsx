@@ -1,4 +1,3 @@
-import type * as React from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { MobileHeader } from "@/components/mobile-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";

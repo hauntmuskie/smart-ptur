@@ -75,15 +75,14 @@ export async function runSMARTCalculation(periodId: number) {
   }
 }
 
-export async function getCalculationData(periodId: number) {
+export async function getCalculationData() {
   const scoreList = await db
     .select({
-      score: scores,
-      employee: employees,
+      scores,
+      employees,
     })
     .from(scores)
     .innerJoin(employees, eq(scores.employeeId, employees.id))
-    .where(eq(scores.periodId, periodId))
     .orderBy(scores.ranking);
 
   return scoreList;

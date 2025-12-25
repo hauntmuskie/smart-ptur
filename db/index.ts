@@ -1,13 +1,30 @@
-import { connect } from "@tidbcloud/serverless";
-import { drizzle } from "drizzle-orm/tidb-serverless";
-import * as schema from "./schema";
+import { createMySQLConnection } from "./drivers/mysql";
+import { createTiDBConnection } from "./drivers/tidb";
+import type { Database } from "./types";
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL environment variable is not set");
+export type { Database, MySQLDatabase, TiDBDatabase } from "./types";
+
+type DBDriver = "mysql" | "tidb";
+
+function getDBDriver(): DBDriver {
+  const driver = process.env.DB_DRIVER as DBDriver | undefined;
+  if (driver === "mysql" || driver === "tidb") {
+    return driver;
+  }
+  return process.env.NODE_ENV === "production" ? "tidb" : "mysql";
 }
 
-const client = connect({
-  url: process.env.DATABASE_URL,
-});
+function createDatabaseConnection(): Database {
+  const driver = getDBDriver();
 
-export const db = drizzle({ client, schema });
+  switch (driver) {
+    case "mysql":
+      return createMySQLConnection();
+    case "tidb":
+      return createTiDBConnection() as unknown as Database;
+    default:
+      throw new Error(`Unsupported database driver: ${driver}`);
+  }
+}
+
+export const db = createDatabaseConnection();

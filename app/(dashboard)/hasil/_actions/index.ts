@@ -17,8 +17,8 @@ export async function getData() {
 
   const scoreList = await db
     .select({
-      score: scores,
-      employee: employees,
+      scores,
+      employees,
     })
     .from(scores)
     .innerJoin(employees, eq(scores.employeeId, employees.id))

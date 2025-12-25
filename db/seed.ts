@@ -1,19 +1,9 @@
-import { connect } from "@tidbcloud/serverless";
+import "dotenv/config";
 import { hash } from "bcryptjs";
-import { drizzle } from "drizzle-orm/tidb-serverless";
+import { db } from "./index";
 import * as schema from "./schema";
 
 async function seed() {
-  if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL environment variable is not set");
-  }
-
-  const client = connect({
-    url: process.env.DATABASE_URL,
-  });
-
-  const db = drizzle({ client, schema });
-
   console.log("Seeding database...");
 
   const hashedPassword = await hash("admin123", 10);

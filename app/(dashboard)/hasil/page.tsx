@@ -97,31 +97,31 @@ function ResultsContent({
               </div>
               <div>
                 <h2 className="font-bold text-2xl">
-                  {winner.employee.namaLengkap}
+                  {winner.employees.namaLengkap}
                 </h2>
                 <p className="text-muted-foreground">
-                  {winner.employee.departemen} - {winner.employee.jabatan}
+                  {winner.employees.departemen} - {winner.employees.jabatan}
                 </p>
                 <div className="mt-2 flex items-center gap-4">
                   <Badge variant="outline" className="text-lg">
-                    {winner.employee.kodeAlternatif}
+                    {winner.employees.kodeAlternatif}
                   </Badge>
                   <span className="font-semibold">
                     Score:{" "}
-                    {parseFloat(winner.score.totalScore || "0").toFixed(4)}
+                    {parseFloat(winner.scores.totalScore || "0").toFixed(4)}
                   </span>
                   <Badge
                     variant={
-                      winner.score.grade === "sangat_baik"
+                      winner.scores.grade === "sangat_baik"
                         ? "default"
-                        : winner.score.grade === "baik"
+                        : winner.scores.grade === "baik"
                           ? "secondary"
                           : "destructive"
                     }
                   >
-                    {winner.score.grade === "sangat_baik"
+                    {winner.scores.grade === "sangat_baik"
                       ? "Sangat Baik"
-                      : winner.score.grade === "baik"
+                      : winner.scores.grade === "baik"
                         ? "Baik"
                         : "Kurang"}
                   </Badge>
@@ -156,44 +156,46 @@ function ResultsContent({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {scoreList.map(({ score, employee }) => {
-                const gradeVariant = getGradeVariant(score.grade);
-                const gradeLabel = getGradeLabel(score.grade);
+              {scoreList.map(({ scores, employees }) => {
+                const gradeVariant = getGradeVariant(scores.grade);
+                const gradeLabel = getGradeLabel(scores.grade);
 
                 return (
                   <TableRow
-                    key={score.id}
-                    className={score.ranking === 1 ? "bg-yellow-50" : ""}
+                    key={scores.id}
+                    className={scores.ranking === 1 ? "bg-yellow-50" : ""}
                   >
                     <TableCell className="text-center">
                       <div className="flex items-center justify-center gap-2">
-                        {getRankIcon(score.ranking || 0)}
+                        {getRankIcon(scores.ranking || 0)}
                         <span className="font-bold text-lg">
-                          #{score.ranking}
+                          #{scores.ranking}
                         </span>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline">{employee.kodeAlternatif}</Badge>
+                      <Badge variant="outline">
+                        {employees.kodeAlternatif}
+                      </Badge>
                     </TableCell>
                     <TableCell className="font-medium">
-                      {employee.namaLengkap}
+                      {employees.namaLengkap}
                     </TableCell>
-                    <TableCell>{employee.departemen}</TableCell>
+                    <TableCell>{employees.departemen}</TableCell>
                     <TableCell className="text-center">
-                      {score.k1Score}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {score.k2Score}
+                      {scores.k1Score}
                     </TableCell>
                     <TableCell className="text-center">
-                      {score.k3Score}
+                      {scores.k2Score}
                     </TableCell>
                     <TableCell className="text-center">
-                      {score.k4Score}
+                      {scores.k3Score}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {scores.k4Score}
                     </TableCell>
                     <TableCell className="text-center font-semibold">
-                      {parseFloat(score.totalScore || "0").toFixed(4)}
+                      {parseFloat(scores.totalScore || "0").toFixed(4)}
                     </TableCell>
                     <TableCell className="text-center">
                       <Badge variant={gradeVariant}>{gradeLabel}</Badge>
@@ -266,9 +268,9 @@ export default async function HasilPage() {
     );
   }
 
-  const hasResults = scoreList.some((s) => s.score.totalScore);
+  const hasResults = scoreList.some((s) => s.scores.totalScore);
   const winner = hasResults
-    ? scoreList.find((s) => s.score.ranking === 1)
+    ? scoreList.find((s) => s.scores.ranking === 1)
     : null;
 
   if (!hasResults) {
