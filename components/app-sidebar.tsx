@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { logout } from "@/app/actions/auth";
+import { logout } from "@/app/_actions/auth";
 import {
   Sidebar,
   SidebarContent,

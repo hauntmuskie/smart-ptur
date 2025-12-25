@@ -3,7 +3,7 @@
 import { Pencil, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { upsertScore } from "@/app/actions/scores";
+import { upsertScore } from "@/app/_actions/scores";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

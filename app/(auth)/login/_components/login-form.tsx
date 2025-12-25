@@ -2,7 +2,7 @@
 
 import { AlertCircle, Loader2 } from "lucide-react";
 import { useActionState } from "react";
-import { type LoginState, login } from "@/app/actions/auth";
+import { type LoginState, login } from "@/app/_actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

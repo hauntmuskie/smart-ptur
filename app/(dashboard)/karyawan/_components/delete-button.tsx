@@ -3,7 +3,7 @@
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { deleteEmployee } from "@/app/actions/employees";
+import { deleteEmployee } from "@/app/_actions/employees";
 import {
   AlertDialog,
   AlertDialogAction,

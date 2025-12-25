@@ -2,16 +2,9 @@
 
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 import { db } from "@/db";
 import { criteria } from "@/db/schema";
-
-const CriteriaSchema = z.object({
-  kode: z.string().min(1, "Kode kriteria wajib diisi"),
-  nama: z.string().min(1, "Nama kriteria wajib diisi"),
-  bobot: z.string().min(1, "Bobot wajib diisi"),
-  keterangan: z.string().optional(),
-});
+import { criteriaFormSchema } from "@/db/validation";
 
 export type CriteriaState = {
   errors?: {
@@ -47,7 +40,7 @@ export async function createCriteria(
   _prevState: CriteriaState,
   formData: FormData,
 ): Promise<CriteriaState> {
-  const validatedFields = CriteriaSchema.safeParse({
+  const validatedFields = criteriaFormSchema.safeParse({
     kode: formData.get("kode"),
     nama: formData.get("nama"),
     bobot: formData.get("bobot"),
@@ -80,7 +73,7 @@ export async function updateCriteria(
   _prevState: CriteriaState,
   formData: FormData,
 ): Promise<CriteriaState> {
-  const validatedFields = CriteriaSchema.safeParse({
+  const validatedFields = criteriaFormSchema.safeParse({
     kode: formData.get("kode"),
     nama: formData.get("nama"),
     bobot: formData.get("bobot"),

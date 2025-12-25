@@ -2,15 +2,9 @@
 
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 import { db } from "@/db";
 import { employees } from "@/db/schema";
-import { insertEmployeeSchema } from "@/db/zodSchemas";
-
-// Extend the base schema for form-specific validation
-const EmployeeFormSchema = insertEmployeeSchema.extend({
-  tanggalBergabung: z.string().optional(),
-});
+import { employeeFormSchema } from "@/db/validation";
 
 export type EmployeeState = {
   errors?: {
@@ -31,7 +25,7 @@ export async function createEmployee(
   _prevState: EmployeeState,
   formData: FormData,
 ): Promise<EmployeeState> {
-  const validatedFields = EmployeeFormSchema.safeParse({
+  const validatedFields = employeeFormSchema.safeParse({
     kodeAlternatif: formData.get("kodeAlternatif"),
     namaLengkap: formData.get("namaLengkap"),
     nik: formData.get("nik"),
@@ -70,7 +64,7 @@ export async function updateEmployee(
   _prevState: EmployeeState,
   formData: FormData,
 ): Promise<EmployeeState> {
-  const validatedFields = EmployeeFormSchema.safeParse({
+  const validatedFields = employeeFormSchema.safeParse({
     kodeAlternatif: formData.get("kodeAlternatif"),
     namaLengkap: formData.get("namaLengkap"),
     nik: formData.get("nik"),

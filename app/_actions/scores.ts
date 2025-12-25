@@ -2,18 +2,9 @@
 
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 import { db } from "@/db";
 import { periods, scores } from "@/db/schema";
-
-const ScoreSchema = z.object({
-  employeeId: z.number(),
-  periodId: z.number(),
-  k1Score: z.string().min(1, "Nilai K1 wajib diisi"),
-  k2Score: z.string().min(1, "Nilai K2 wajib diisi"),
-  k3Score: z.string().min(1, "Nilai K3 wajib diisi"),
-  k4Score: z.string().min(1, "Nilai K4 wajib diisi"),
-});
+import { periodFormSchema, scoreFormSchema } from "@/db/validation";
 
 export type ScoreState = {
   errors?: {
@@ -40,7 +31,7 @@ export async function upsertScore(
   periodId: number,
   formData: FormData,
 ): Promise<ScoreState> {
-  const validatedFields = ScoreSchema.safeParse({
+  const validatedFields = scoreFormSchema.safeParse({
     employeeId,
     periodId,
     k1Score: formData.get("k1Score"),
@@ -94,6 +85,19 @@ export async function upsertScore(
 }
 
 export async function createPeriod(name: string, bulan: number, tahun: number) {
+  const validatedFields = periodFormSchema.safeParse({
+    name,
+    bulan,
+    tahun,
+  });
+
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      message: validatedFields.error.issues[0]?.message || "Validasi gagal",
+    };
+  }
+
   try {
     await db
       .update(periods)
@@ -101,9 +105,9 @@ export async function createPeriod(name: string, bulan: number, tahun: number) {
       .where(eq(periods.status, "active"));
 
     await db.insert(periods).values({
-      name,
-      bulan,
-      tahun,
+      name: validatedFields.data.name,
+      bulan: validatedFields.data.bulan,
+      tahun: validatedFields.data.tahun,
       status: "active",
     });
 

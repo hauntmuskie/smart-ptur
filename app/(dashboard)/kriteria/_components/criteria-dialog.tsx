@@ -7,7 +7,7 @@ import {
   type CriteriaState,
   createCriteria,
   updateCriteria,
-} from "@/app/actions/criteria";
+} from "@/app/_actions/criteria";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

@@ -1,8 +1,14 @@
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { criteria, employees, periods, scores, users } from "./schema";
+import {
+  criteria,
+  employeeActivities,
+  employees,
+  periods,
+  scores,
+  users,
+} from "./schema";
 
-// User schemas
 export const insertUserSchema = createInsertSchema(users, {
   username: z
     .string()
@@ -15,7 +21,11 @@ export const selectUserSchema = createSelectSchema(users);
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type SelectUser = z.infer<typeof selectUserSchema>;
 
-// Employee schemas
+export const loginSchema = z.object({
+  username: z.string().min(1, "Username wajib diisi"),
+  password: z.string().min(1, "Password wajib diisi"),
+});
+
 export const insertEmployeeSchema = createInsertSchema(employees, {
   kodeAlternatif: z.string().min(1, "Kode alternatif wajib diisi"),
   namaLengkap: z.string().min(2, "Nama lengkap minimal 2 karakter"),
@@ -23,10 +33,14 @@ export const insertEmployeeSchema = createInsertSchema(employees, {
   departemen: z.string().min(1, "Departemen wajib diisi"),
 });
 export const selectEmployeeSchema = createSelectSchema(employees);
+
+export const employeeFormSchema = insertEmployeeSchema.extend({
+  tanggalBergabung: z.string().optional(),
+});
+
 export type InsertEmployee = z.infer<typeof insertEmployeeSchema>;
 export type SelectEmployee = z.infer<typeof selectEmployeeSchema>;
 
-// Criteria schemas
 export const insertCriteriaSchema = createInsertSchema(criteria, {
   kode: z.string().min(1, "Kode kriteria wajib diisi"),
   nama: z.string().min(2, "Nama kriteria minimal 2 karakter"),
@@ -39,20 +53,33 @@ export const insertCriteriaSchema = createInsertSchema(criteria, {
   ),
 });
 export const selectCriteriaSchema = createSelectSchema(criteria);
+
+export const criteriaFormSchema = z.object({
+  kode: z.string().min(1, "Kode kriteria wajib diisi"),
+  nama: z.string().min(1, "Nama kriteria wajib diisi"),
+  bobot: z.string().min(1, "Bobot wajib diisi"),
+  keterangan: z.string().optional(),
+});
+
 export type InsertCriteria = z.infer<typeof insertCriteriaSchema>;
 export type SelectCriteria = z.infer<typeof selectCriteriaSchema>;
 
-// Period schemas
 export const insertPeriodSchema = createInsertSchema(periods, {
   name: z.string().min(1, "Nama period wajib diisi"),
   bulan: z.number().min(1).max(12, "Bulan harus antara 1-12"),
   tahun: z.number().min(2000).max(2100, "Tahun tidak valid"),
 });
 export const selectPeriodSchema = createSelectSchema(periods);
+
+export const periodFormSchema = z.object({
+  name: z.string().min(1, "Nama periode wajib diisi"),
+  bulan: z.number().min(1).max(12, "Bulan harus antara 1-12"),
+  tahun: z.number().min(2000).max(2100, "Tahun tidak valid"),
+});
+
 export type InsertPeriod = z.infer<typeof insertPeriodSchema>;
 export type SelectPeriod = z.infer<typeof selectPeriodSchema>;
 
-// Score schemas
 export const insertScoreSchema = createInsertSchema(scores, {
   k1Score: z.string().optional(),
   k2Score: z.string().optional(),
@@ -60,5 +87,33 @@ export const insertScoreSchema = createInsertSchema(scores, {
   k4Score: z.string().optional(),
 });
 export const selectScoreSchema = createSelectSchema(scores);
+
+export const scoreFormSchema = z.object({
+  employeeId: z.number(),
+  periodId: z.number(),
+  k1Score: z.string().min(1, "Nilai K1 wajib diisi"),
+  k2Score: z.string().min(1, "Nilai K2 wajib diisi"),
+  k3Score: z.string().min(1, "Nilai K3 wajib diisi"),
+  k4Score: z.string().min(1, "Nilai K4 wajib diisi"),
+});
+
 export type InsertScore = z.infer<typeof insertScoreSchema>;
 export type SelectScore = z.infer<typeof selectScoreSchema>;
+
+export const insertEmployeeActivitySchema = createInsertSchema(
+  employeeActivities,
+  {
+    tanggal: z.date(),
+    jamMasuk: z.string().optional(),
+    jamPulang: z.string().optional(),
+  },
+);
+export const selectEmployeeActivitySchema =
+  createSelectSchema(employeeActivities);
+
+export type InsertEmployeeActivity = z.infer<
+  typeof insertEmployeeActivitySchema
+>;
+export type SelectEmployeeActivity = z.infer<
+  typeof selectEmployeeActivitySchema
+>;

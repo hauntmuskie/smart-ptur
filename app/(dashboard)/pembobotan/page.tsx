@@ -17,8 +17,8 @@ import {
 } from "@/components/ui/table";
 import { db } from "@/db";
 import { criteria, employees, periods, scores } from "@/db/schema";
-import { PeriodDialog } from "./period-dialog";
-import { ScoreForm } from "./score-form";
+import { PeriodDialog } from "./_components/period-dialog";
+import { ScoreForm } from "./_components/score-form";
 
 function getGradeLabel(score: number): {
   label: string;

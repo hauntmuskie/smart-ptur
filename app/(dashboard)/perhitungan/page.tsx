@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table";
 import { db } from "@/db";
 import { criteria, employees, periods, scores } from "@/db/schema";
-import { CalculationButton } from "./calculation-button";
+import { CalculationButton } from "./_components/calculation-button";
 
 async function getData() {
   const [activePeriod] = await db

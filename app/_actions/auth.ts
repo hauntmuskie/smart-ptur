@@ -2,16 +2,11 @@
 
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
-import { z } from "zod";
 import { db } from "@/db";
 import { users } from "@/db/schema";
+import { loginSchema } from "@/db/validation";
 import { verifyPassword } from "@/lib/auth";
 import { createSession, deleteSession } from "@/lib/session";
-
-const LoginSchema = z.object({
-  username: z.string().min(1, "Username wajib diisi"),
-  password: z.string().min(1, "Password wajib diisi"),
-});
 
 export type LoginState = {
   errors?: {
@@ -25,7 +20,7 @@ export async function login(
   _prevState: LoginState,
   formData: FormData,
 ): Promise<LoginState> {
-  const validatedFields = LoginSchema.safeParse({
+  const validatedFields = loginSchema.safeParse({
     username: formData.get("username"),
     password: formData.get("password"),
   });

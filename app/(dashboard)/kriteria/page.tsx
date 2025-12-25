@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/table";
 import { db } from "@/db";
 import { criteria } from "@/db/schema";
-import { CriteriaDialog } from "./criteria-dialog";
-import { DeleteCriteriaButton } from "./delete-button";
+import { CriteriaDialog } from "./_components/criteria-dialog";
+import { DeleteCriteriaButton } from "./_components/delete-button";
 
 async function getCriteria() {
   return db.select().from(criteria).orderBy(criteria.kode);

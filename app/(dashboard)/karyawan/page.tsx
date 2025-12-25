@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/table";
 import { db } from "@/db";
 import { employees } from "@/db/schema";
-import { DeleteEmployeeButton } from "./delete-button";
-import { EmployeeDialog } from "./employee-dialog";
+import { DeleteEmployeeButton } from "./_components/delete-button";
+import { EmployeeDialog } from "./_components/employee-dialog";
 
 async function getEmployees() {
   return db.select().from(employees).orderBy(employees.kodeAlternatif);

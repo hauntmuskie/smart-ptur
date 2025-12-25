@@ -3,7 +3,7 @@
 import { Calculator } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { runSMARTCalculation } from "@/app/actions/calculation";
+import { runSMARTCalculation } from "@/app/_actions/calculation";
 import { Button } from "@/components/ui/button";
 
 interface CalculationButtonProps {

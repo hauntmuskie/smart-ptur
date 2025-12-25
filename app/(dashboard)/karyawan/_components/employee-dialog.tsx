@@ -7,7 +7,7 @@ import {
   createEmployee,
   type EmployeeState,
   updateEmployee,
-} from "@/app/actions/employees";
+} from "@/app/_actions/employees";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
