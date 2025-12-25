@@ -2,8 +2,6 @@ import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { decrypt } from "@/lib/session";
 
-export const runtime = "edge";
-
 const protectedRoutes = [
   "/dashboard",
   "/karyawan",
@@ -14,7 +12,7 @@ const protectedRoutes = [
 ];
 const publicRoutes = ["/login", "/hasil"];
 
-export default async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const isProtected = protectedRoutes.some((route) => path.startsWith(route));
   const _isPublic = publicRoutes.includes(path);
