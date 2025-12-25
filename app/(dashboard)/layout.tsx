@@ -1,5 +1,3 @@
-"use client";
-
 import type * as React from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { MobileHeader } from "@/components/mobile-header";
@@ -8,9 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 export default function DashboardLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <SidebarProvider>
       <AppSidebar />

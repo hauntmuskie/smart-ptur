@@ -2,9 +2,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 export default function AuthLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
       {children}
