@@ -2,6 +2,8 @@ import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { decrypt } from "@/lib/session";
 
+export const runtime = "edge";
+
 const protectedRoutes = [
   "/dashboard",
   "/karyawan",
