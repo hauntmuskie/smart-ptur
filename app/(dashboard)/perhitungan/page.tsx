@@ -1,4 +1,3 @@
-import { eq } from "drizzle-orm";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -15,35 +14,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { db } from "@/db";
-import { criteria, employees, periods, scores } from "@/db/schema";
+import { getData } from "./_actions";
 import { CalculationButton } from "./_components/calculation-button";
-
-async function getData() {
-  const [activePeriod] = await db
-    .select()
-    .from(periods)
-    .where(eq(periods.status, "active"))
-    .limit(1);
-
-  if (!activePeriod) {
-    return { activePeriod: null, scoreList: [], criteriaList: [] };
-  }
-
-  const scoreList = await db
-    .select({
-      score: scores,
-      employee: employees,
-    })
-    .from(scores)
-    .innerJoin(employees, eq(scores.employeeId, employees.id))
-    .where(eq(scores.periodId, activePeriod.id))
-    .orderBy(employees.kodeAlternatif);
-
-  const criteriaList = await db.select().from(criteria).orderBy(criteria.kode);
-
-  return { activePeriod, scoreList, criteriaList };
-}
 
 export default async function PerhitunganPage() {
   const { activePeriod, scoreList, criteriaList } = await getData();

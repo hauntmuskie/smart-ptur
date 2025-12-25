@@ -4,6 +4,11 @@ import { cookies } from "next/headers";
 import type { User } from "@/db/schema";
 
 const secretKey = process.env.SESSION_SECRET;
+if (!secretKey) {
+  throw new Error(
+    "SESSION_SECRET environment variable is not set. Please add it to your .env.local file.",
+  );
+}
 const encodedKey = new TextEncoder().encode(secretKey);
 
 type SessionPayload = {
@@ -11,7 +16,7 @@ type SessionPayload = {
   username: string;
   name: string;
   role: "admin" | "employee";
-  expiresAt: Date;
+  expiresAt: number;
 };
 
 export async function createSession(user: User) {
@@ -22,7 +27,7 @@ export async function createSession(user: User) {
     username: user.username,
     name: user.name,
     role: user.role,
-    expiresAt,
+    expiresAt: expiresAt.getTime(),
   });
 
   const cookieStore = await cookies();

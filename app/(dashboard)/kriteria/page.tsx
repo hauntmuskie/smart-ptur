@@ -8,14 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { db } from "@/db";
-import { criteria } from "@/db/schema";
+import { getCriteria } from "./_actions";
 import { CriteriaDialog } from "./_components/criteria-dialog";
 import { DeleteCriteriaButton } from "./_components/delete-button";
-
-async function getCriteria() {
-  return db.select().from(criteria).orderBy(criteria.kode);
-}
 
 export default async function KriteriaPage() {
   const criteriaList = await getCriteria();

@@ -1,4 +1,3 @@
-import { eq } from "drizzle-orm";
 import { Award, Medal, Trophy } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -16,32 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { db } from "@/db";
-import { employees, periods, scores } from "@/db/schema";
-
-async function getData() {
-  const [activePeriod] = await db
-    .select()
-    .from(periods)
-    .where(eq(periods.status, "active"))
-    .limit(1);
-
-  if (!activePeriod) {
-    return { activePeriod: null, scoreList: [] };
-  }
-
-  const scoreList = await db
-    .select({
-      score: scores,
-      employee: employees,
-    })
-    .from(scores)
-    .innerJoin(employees, eq(scores.employeeId, employees.id))
-    .where(eq(scores.periodId, activePeriod.id))
-    .orderBy(scores.ranking);
-
-  return { activePeriod, scoreList };
-}
+import { getData } from "./_actions";
 
 function getRankIcon(rank: number) {
   switch (rank) {
@@ -109,7 +83,7 @@ function ResultsContent({
   return (
     <>
       {winner && (
-        <Card className="border-yellow-200 bg-gradient-to-r from-yellow-50 to-amber-50">
+        <Card className="border-yellow-200 bg-linear-to-r from-yellow-50 to-amber-50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Trophy className="h-6 w-6 text-yellow-500" />

@@ -1,13 +1,13 @@
-import { drizzle } from "drizzle-orm/mysql2";
-import mysql from "mysql2/promise";
+import { connect } from "@tidbcloud/serverless";
+import { drizzle } from "drizzle-orm/tidb-serverless";
 import * as schema from "./schema";
 
-const poolConnection = mysql.createPool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL environment variable is not set");
+}
+
+const client = connect({
+  url: process.env.DATABASE_URL,
 });
 
-export const db = drizzle({ client: poolConnection, schema, mode: "default" });
+export const db = drizzle({ client, schema });

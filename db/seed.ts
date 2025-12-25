@@ -1,18 +1,18 @@
+import { connect } from "@tidbcloud/serverless";
 import { hash } from "bcryptjs";
-import { drizzle } from "drizzle-orm/mysql2";
-import mysql from "mysql2/promise";
+import { drizzle } from "drizzle-orm/tidb-serverless";
 import * as schema from "./schema";
 
 async function seed() {
-  const connection = await mysql.createConnection({
-    host: process.env.DB_HOST || "localhost",
-    port: Number(process.env.DB_PORT) || 3306,
-    user: process.env.DB_USER || "root",
-    password: process.env.DB_PASSWORD || "",
-    database: process.env.DB_NAME || "spk_smart",
+  if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL environment variable is not set");
+  }
+
+  const client = connect({
+    url: process.env.DATABASE_URL,
   });
 
-  const db = drizzle({ client: connection, schema, mode: "default" });
+  const db = drizzle({ client, schema });
 
   console.log("Seeding database...");
 
@@ -172,7 +172,6 @@ async function seed() {
   console.log("  Username: admin");
   console.log("  Password: admin123");
 
-  await connection.end();
   process.exit(0);
 }
 
