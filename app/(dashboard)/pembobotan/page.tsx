@@ -29,6 +29,56 @@ function getGradeLabel(score: number): {
   return { label: "Kurang", variant: "destructive" };
 }
 
+function ScoreBadge({ scoreValue }: { scoreValue: string | null }) {
+  if (!scoreValue) return <>-</>;
+
+  const grade = getGradeLabel(parseFloat(scoreValue));
+  return (
+    <div className="flex flex-col items-center gap-1">
+      <span className="font-semibold">{scoreValue}</span>
+      <Badge variant={grade.variant} className="text-xs">
+        {grade.label}
+      </Badge>
+    </div>
+  );
+}
+
+function EmployeeScoreRow({
+  emp,
+  empScore,
+  activePeriodId,
+}: {
+  emp: typeof employees.$inferSelect;
+  empScore: typeof scores.$inferSelect | undefined;
+  criteriaList: (typeof criteria.$inferSelect)[];
+  activePeriodId: number;
+}) {
+  return (
+    <TableRow>
+      <TableCell>
+        <Badge variant="outline">{emp.kodeAlternatif}</Badge>
+      </TableCell>
+      <TableCell className="font-medium">{emp.namaLengkap}</TableCell>
+      <TableCell>{emp.departemen}</TableCell>
+      <TableCell className="text-center">
+        <ScoreBadge scoreValue={empScore?.k1Score ?? null} />
+      </TableCell>
+      <TableCell className="text-center">
+        <ScoreBadge scoreValue={empScore?.k2Score ?? null} />
+      </TableCell>
+      <TableCell className="text-center">
+        <ScoreBadge scoreValue={empScore?.k3Score ?? null} />
+      </TableCell>
+      <TableCell className="text-center">
+        <ScoreBadge scoreValue={empScore?.k4Score ?? null} />
+      </TableCell>
+      <TableCell className="text-center">
+        <ScoreForm employee={emp} periodId={activePeriodId} />
+      </TableCell>
+    </TableRow>
+  );
+}
+
 async function getData() {
   const [activePeriod] = await db
     .select()
@@ -131,121 +181,15 @@ export default async function PembobotanPage() {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    employeeList.map((emp) => {
-                      const empScore = scoreMap.get(emp.id);
-                      return (
-                        <TableRow key={emp.id}>
-                          <TableCell>
-                            <Badge variant="outline">
-                              {emp.kodeAlternatif}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="font-medium">
-                            {emp.namaLengkap}
-                          </TableCell>
-                          <TableCell>{emp.departemen}</TableCell>
-                          <TableCell className="text-center">
-                            {empScore?.k1Score ? (
-                              <div className="flex flex-col items-center gap-1">
-                                <span className="font-semibold">
-                                  {empScore.k1Score}
-                                </span>
-                                <Badge
-                                  variant={
-                                    getGradeLabel(parseFloat(empScore.k1Score))
-                                      .variant
-                                  }
-                                  className="text-xs"
-                                >
-                                  {
-                                    getGradeLabel(parseFloat(empScore.k1Score))
-                                      .label
-                                  }
-                                </Badge>
-                              </div>
-                            ) : (
-                              "-"
-                            )}
-                          </TableCell>
-                          <TableCell className="text-center">
-                            {empScore?.k2Score ? (
-                              <div className="flex flex-col items-center gap-1">
-                                <span className="font-semibold">
-                                  {empScore.k2Score}
-                                </span>
-                                <Badge
-                                  variant={
-                                    getGradeLabel(parseFloat(empScore.k2Score))
-                                      .variant
-                                  }
-                                  className="text-xs"
-                                >
-                                  {
-                                    getGradeLabel(parseFloat(empScore.k2Score))
-                                      .label
-                                  }
-                                </Badge>
-                              </div>
-                            ) : (
-                              "-"
-                            )}
-                          </TableCell>
-                          <TableCell className="text-center">
-                            {empScore?.k3Score ? (
-                              <div className="flex flex-col items-center gap-1">
-                                <span className="font-semibold">
-                                  {empScore.k3Score}
-                                </span>
-                                <Badge
-                                  variant={
-                                    getGradeLabel(parseFloat(empScore.k3Score))
-                                      .variant
-                                  }
-                                  className="text-xs"
-                                >
-                                  {
-                                    getGradeLabel(parseFloat(empScore.k3Score))
-                                      .label
-                                  }
-                                </Badge>
-                              </div>
-                            ) : (
-                              "-"
-                            )}
-                          </TableCell>
-                          <TableCell className="text-center">
-                            {empScore?.k4Score ? (
-                              <div className="flex flex-col items-center gap-1">
-                                <span className="font-semibold">
-                                  {empScore.k4Score}
-                                </span>
-                                <Badge
-                                  variant={
-                                    getGradeLabel(parseFloat(empScore.k4Score))
-                                      .variant
-                                  }
-                                  className="text-xs"
-                                >
-                                  {
-                                    getGradeLabel(parseFloat(empScore.k4Score))
-                                      .label
-                                  }
-                                </Badge>
-                              </div>
-                            ) : (
-                              "-"
-                            )}
-                          </TableCell>
-                          <TableCell className="text-center">
-                            <ScoreForm
-                              employee={emp}
-                              periodId={activePeriod.id}
-                              existingScore={empScore}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })
+                    employeeList.map((emp) => (
+                      <EmployeeScoreRow
+                        key={emp.id}
+                        emp={emp}
+                        empScore={scoreMap.get(emp.id)}
+                        criteriaList={criteriaList}
+                        activePeriodId={activePeriod.id}
+                      />
+                    ))
                   )}
                 </TableBody>
               </Table>

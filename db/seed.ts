@@ -70,7 +70,7 @@ async function seed() {
       jenisKelamin: "P",
       departemen: "Marketing",
       jabatan: "Staff Marketing",
-      tanggalBergabung: "2023-01-15",
+      tanggalBergabung: new Date("2023-01-15"),
     },
     {
       kodeAlternatif: "C2",
@@ -80,7 +80,7 @@ async function seed() {
       jenisKelamin: "P",
       departemen: "Purchasing",
       jabatan: "Staff Purchasing",
-      tanggalBergabung: "2022-06-01",
+      tanggalBergabung: new Date("2022-06-01"),
     },
     {
       kodeAlternatif: "C3",
@@ -90,7 +90,7 @@ async function seed() {
       jenisKelamin: "P",
       departemen: "HR GA",
       jabatan: "Staff HR",
-      tanggalBergabung: "2021-03-10",
+      tanggalBergabung: new Date("2021-03-10"),
     },
     {
       kodeAlternatif: "C4",
@@ -100,7 +100,7 @@ async function seed() {
       jenisKelamin: "L",
       departemen: "Sales",
       jabatan: "Staff Sales",
-      tanggalBergabung: "2023-08-20",
+      tanggalBergabung: new Date("2023-08-20"),
     },
     {
       kodeAlternatif: "C5",
@@ -110,7 +110,7 @@ async function seed() {
       jenisKelamin: "L",
       departemen: "Ekspedisi",
       jabatan: "Staff Ekspedisi",
-      tanggalBergabung: "2022-11-05",
+      tanggalBergabung: new Date("2022-11-05"),
     },
   ]);
   console.log("Created 5 sample employees (C1-C5)");

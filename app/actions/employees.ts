@@ -5,17 +5,10 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db } from "@/db";
 import { employees } from "@/db/schema";
+import { insertEmployeeSchema } from "@/db/zodSchemas";
 
-const EmployeeSchema = z.object({
-  kodeAlternatif: z.string().min(1, "Kode alternatif wajib diisi"),
-  namaLengkap: z.string().min(2, "Nama lengkap minimal 2 karakter"),
-  nik: z.string().min(1, "NIK wajib diisi"),
-  barcode: z.string().optional(),
-  jenisKelamin: z.enum(["L", "P"], {
-    required_error: "Jenis kelamin wajib dipilih",
-  }),
-  departemen: z.string().min(1, "Departemen wajib diisi"),
-  jabatan: z.string().optional(),
+// Extend the base schema for form-specific validation
+const EmployeeFormSchema = insertEmployeeSchema.extend({
   tanggalBergabung: z.string().optional(),
 });
 
@@ -38,7 +31,7 @@ export async function createEmployee(
   _prevState: EmployeeState,
   formData: FormData,
 ): Promise<EmployeeState> {
-  const validatedFields = EmployeeSchema.safeParse({
+  const validatedFields = EmployeeFormSchema.safeParse({
     kodeAlternatif: formData.get("kodeAlternatif"),
     namaLengkap: formData.get("namaLengkap"),
     nik: formData.get("nik"),
@@ -58,7 +51,9 @@ export async function createEmployee(
   try {
     await db.insert(employees).values({
       ...validatedFields.data,
-      tanggalBergabung: validatedFields.data.tanggalBergabung || null,
+      tanggalBergabung: validatedFields.data.tanggalBergabung
+        ? new Date(validatedFields.data.tanggalBergabung)
+        : null,
     });
 
     revalidatePath("/karyawan");
@@ -75,7 +70,7 @@ export async function updateEmployee(
   _prevState: EmployeeState,
   formData: FormData,
 ): Promise<EmployeeState> {
-  const validatedFields = EmployeeSchema.safeParse({
+  const validatedFields = EmployeeFormSchema.safeParse({
     kodeAlternatif: formData.get("kodeAlternatif"),
     namaLengkap: formData.get("namaLengkap"),
     nik: formData.get("nik"),
@@ -97,7 +92,9 @@ export async function updateEmployee(
       .update(employees)
       .set({
         ...validatedFields.data,
-        tanggalBergabung: validatedFields.data.tanggalBergabung || null,
+        tanggalBergabung: validatedFields.data.tanggalBergabung
+          ? new Date(validatedFields.data.tanggalBergabung)
+          : null,
       })
       .where(eq(employees.id, id));
 
