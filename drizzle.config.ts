@@ -1,19 +1,15 @@
 import "dotenv/config";
 import { defineConfig } from "drizzle-kit";
 
-const driver = process.env.DB_DRIVER ?? "mysql";
-const isProduction = process.env.NODE_ENV === "production" || driver === "tidb";
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL environment variable is not set");
+}
 
 export default defineConfig({
   dialect: "mysql",
   schema: "./db/schema.ts",
-  out: "./db/migrations",
+  out: "./drizzle",
   dbCredentials: {
-    url: process.env.DATABASE_URL ?? "",
-    ...(isProduction && {
-      ssl: {
-        rejectUnauthorized: false,
-      },
-    }),
+    url: process.env.DATABASE_URL,
   },
 });

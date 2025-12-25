@@ -78,8 +78,8 @@ export async function runSMARTCalculation(periodId: number) {
 export async function getCalculationData() {
   const scoreList = await db
     .select({
-      scores,
-      employees,
+      score: scores,
+      employee: employees,
     })
     .from(scores)
     .innerJoin(employees, eq(scores.employeeId, employees.id))
