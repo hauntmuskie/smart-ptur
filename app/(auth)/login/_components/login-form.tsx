@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertCircle, Loader2 } from "lucide-react";
+import Form from "next/form";
 import { useActionState } from "react";
 import { type LoginState, login } from "@/app/_actions/auth";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,7 @@ export function LoginForm() {
   const [state, formAction, isPending] = useActionState(login, initialState);
 
   return (
-    <form action={formAction} className="space-y-4">
+    <Form action={formAction} className="space-y-4">
       {state.message && (
         <div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-red-600 text-sm">
           <AlertCircle className="h-4 w-4" />
@@ -61,6 +62,6 @@ export function LoginForm() {
       <p className="text-center text-muted-foreground text-xs">
         Metode Simple Multi Attribute Rating Technique
       </p>
-    </form>
+    </Form>
   );
 }

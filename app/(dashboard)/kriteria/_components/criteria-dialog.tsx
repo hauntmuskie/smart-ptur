@@ -1,8 +1,7 @@
 "use client";
 
 import { Pencil, Plus } from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
-import { toast } from "sonner";
+import Form from "next/form";
 import {
   type CriteriaState,
   createCriteria,
@@ -19,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { Criteria } from "@/db/schema";
+import { useFormDialog } from "@/hooks/use-form-dialog";
 
 interface CriteriaDialogProps {
   mode: "create" | "edit";
@@ -29,7 +29,6 @@ export function CriteriaDialog({
   mode,
   criteria: criteriaData,
 }: CriteriaDialogProps) {
-  const [open, setOpen] = useState(false);
   const initialState: CriteriaState = {};
 
   const actionFn =
@@ -37,16 +36,10 @@ export function CriteriaDialog({
       ? updateCriteria.bind(null, criteriaData.id)
       : createCriteria;
 
-  const [state, formAction, isPending] = useActionState(actionFn, initialState);
-
-  useEffect(() => {
-    if (state.success) {
-      setOpen(false);
-      toast.success(state.message);
-    } else if (state.message && !state.success) {
-      toast.error(state.message);
-    }
-  }, [state]);
+  const { open, setOpen, state, formAction, isPending } = useFormDialog(
+    actionFn,
+    initialState,
+  );
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -68,7 +61,7 @@ export function CriteriaDialog({
             {mode === "create" ? "Tambah Kriteria" : "Edit Kriteria"}
           </DialogTitle>
         </DialogHeader>
-        <form action={formAction} className="space-y-4">
+        <Form action={formAction} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="kode">Kode Kriteria</Label>
@@ -132,7 +125,7 @@ export function CriteriaDialog({
               {isPending ? "Menyimpan..." : "Simpan"}
             </Button>
           </div>
-        </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

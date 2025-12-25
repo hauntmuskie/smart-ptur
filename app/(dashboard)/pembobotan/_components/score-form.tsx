@@ -1,6 +1,7 @@
 "use client";
 
 import { Pencil, Plus } from "lucide-react";
+import Form from "next/form";
 import { useState } from "react";
 import { toast } from "sonner";
 import { upsertScore } from "@/app/_actions/scores";
@@ -58,7 +59,7 @@ export function ScoreForm({
         <DialogHeader>
           <DialogTitle>Input Nilai - {employee.namaLengkap}</DialogTitle>
         </DialogHeader>
-        <form action={handleSubmit} className="space-y-4">
+        <Form action={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="k1Score">K1 - Disiplin (0-100)</Label>
@@ -133,7 +134,7 @@ export function ScoreForm({
               {isPending ? "Menyimpan..." : "Simpan"}
             </Button>
           </div>
-        </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

@@ -1,8 +1,7 @@
 "use client";
 
 import { Pencil, Plus } from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
-import { toast } from "sonner";
+import Form from "next/form";
 import {
   createEmployee,
   type EmployeeState,
@@ -26,6 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Employee } from "@/db/schema";
+import { useFormDialog } from "@/hooks/use-form-dialog";
 
 interface EmployeeDialogProps {
   mode: "create" | "edit";
@@ -33,7 +33,6 @@ interface EmployeeDialogProps {
 }
 
 export function EmployeeDialog({ mode, employee }: EmployeeDialogProps) {
-  const [open, setOpen] = useState(false);
   const initialState: EmployeeState = {};
 
   const actionFn =
@@ -41,16 +40,10 @@ export function EmployeeDialog({ mode, employee }: EmployeeDialogProps) {
       ? updateEmployee.bind(null, employee.id)
       : createEmployee;
 
-  const [state, formAction, isPending] = useActionState(actionFn, initialState);
-
-  useEffect(() => {
-    if (state.success) {
-      setOpen(false);
-      toast.success(state.message);
-    } else if (state.message && !state.success) {
-      toast.error(state.message);
-    }
-  }, [state]);
+  const { open, setOpen, state, formAction, isPending } = useFormDialog(
+    actionFn,
+    initialState,
+  );
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -72,7 +65,7 @@ export function EmployeeDialog({ mode, employee }: EmployeeDialogProps) {
             {mode === "create" ? "Tambah Data Karyawan" : "Edit Data Karyawan"}
           </DialogTitle>
         </DialogHeader>
-        <form action={formAction} className="space-y-4">
+        <Form action={formAction} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="kodeAlternatif">Kode Alternatif</Label>
@@ -196,7 +189,7 @@ export function EmployeeDialog({ mode, employee }: EmployeeDialogProps) {
               {isPending ? "Menyimpan..." : "Simpan"}
             </Button>
           </div>
-        </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
