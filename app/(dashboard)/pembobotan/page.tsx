@@ -72,7 +72,11 @@ function EmployeeScoreRow({
         <ScoreBadge scoreValue={empScore?.k4Score ?? null} />
       </TableCell>
       <TableCell className="text-center">
-        <ScoreForm employee={emp} periodId={activePeriodId} />
+        <ScoreForm
+          employee={emp}
+          periodId={activePeriodId}
+          existingScore={empScore}
+        />
       </TableCell>
     </TableRow>
   );

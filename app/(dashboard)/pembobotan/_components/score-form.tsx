@@ -49,9 +49,15 @@ export function ScoreForm({
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           {existingScore ? (
-            <Pencil className="h-4 w-4" />
+            <>
+              <Pencil className="mr-1.5 h-4 w-4" />
+              Edit Nilai
+            </>
           ) : (
-            <Plus className="h-4 w-4" />
+            <>
+              <Plus className="mr-1.5 h-4 w-4" />
+              Input Nilai
+            </>
           )}
         </Button>
       </DialogTrigger>
