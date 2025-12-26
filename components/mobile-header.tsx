@@ -10,15 +10,22 @@ export function MobileHeader() {
   if (!isMobile) return null;
 
   return (
-    <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b bg-background/95 px-4 backdrop-blur supports-backdrop-filter:bg-background/60 md:hidden">
-      <div className="flex flex-col">
-        <span className="font-bold text-sm">SPK SMART</span>
-        <span className="text-muted-foreground text-xs">Penerbit Erlangga</span>
+    <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-border/40 border-b bg-background/80 px-4 backdrop-blur-xl md:hidden">
+      <div className="flex items-center gap-3">
+        <div className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
+          <span className="font-bold text-sm">S</span>
+        </div>
+        <div className="flex flex-col">
+          <span className="font-semibold text-sm leading-tight">SPK SMART</span>
+          <span className="text-muted-foreground text-xs leading-tight">
+            Penerbit Erlangga
+          </span>
+        </div>
       </div>
       <Button
         variant="ghost"
         size="icon"
-        className="size-9 shrink-0"
+        className="size-10 shrink-0 rounded-xl transition-all hover:bg-accent/80 active:scale-95"
         onClick={toggleSidebar}
         aria-label="Toggle navigation menu"
       >

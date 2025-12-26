@@ -20,11 +20,11 @@ import { getData } from "./_actions";
 function getRankIcon(rank: number) {
   switch (rank) {
     case 1:
-      return <Trophy className="h-5 w-5 text-yellow-500" />;
+      return <Trophy className="size-4 text-yellow-500 sm:size-5" />;
     case 2:
-      return <Medal className="h-5 w-5 text-gray-400" />;
+      return <Medal className="size-4 text-gray-400 sm:size-5" />;
     case 3:
-      return <Award className="h-5 w-5 text-amber-600" />;
+      return <Award className="size-4 text-amber-600 sm:size-5" />;
     default:
       return null;
   }
@@ -46,7 +46,7 @@ function NoPeriodCard() {
   return (
     <Card>
       <CardContent className="py-8">
-        <p className="text-center text-muted-foreground">
+        <p className="text-center text-muted-foreground text-sm">
           Belum ada periode evaluasi aktif.
         </p>
       </CardContent>
@@ -58,7 +58,7 @@ function NoResultsCard({ periodName }: { periodName: string }) {
   return (
     <Card>
       <CardContent className="py-8">
-        <p className="text-center text-muted-foreground">
+        <p className="text-center text-muted-foreground text-sm">
           Belum ada hasil perhitungan untuk periode {periodName}.
           <br />
           Silakan lakukan proses perhitungan terlebih dahulu.
@@ -83,30 +83,32 @@ function ResultsContent({
   return (
     <>
       {winner && (
-        <Card className="border-yellow-200 bg-linear-to-r from-yellow-50 to-amber-50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Trophy className="h-6 w-6 text-yellow-500" />
-              Karyawan Terbaik - {activePeriodName}
+        <Card className="border-yellow-200 bg-linear-to-br from-yellow-50 to-amber-50 dark:border-yellow-900/50 dark:from-yellow-950/20 dark:to-amber-950/20">
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <Trophy className="size-5 text-yellow-500 sm:size-6" />
+              <span className="truncate">
+                Karyawan Terbaik - {activePeriodName}
+              </span>
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-6">
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-yellow-100">
-                <Trophy className="h-10 w-10 text-yellow-500" />
+          <CardContent className="p-4 pt-0 sm:p-6 sm:pt-0">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+              <div className="mx-auto flex size-16 shrink-0 items-center justify-center rounded-full bg-yellow-100 sm:mx-0 sm:size-20 dark:bg-yellow-900/30">
+                <Trophy className="size-8 text-yellow-500 sm:size-10" />
               </div>
-              <div>
-                <h2 className="font-bold text-2xl">
+              <div className="min-w-0 flex-1 text-center sm:text-left">
+                <h2 className="truncate font-bold text-xl sm:text-2xl">
                   {winner.employee.namaLengkap}
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="truncate text-muted-foreground text-sm">
                   {winner.employee.departemen} - {winner.employee.jabatan}
                 </p>
-                <div className="mt-2 flex items-center gap-4">
-                  <Badge variant="outline" className="text-lg">
+                <div className="mt-3 flex flex-wrap items-center justify-center gap-2 sm:justify-start sm:gap-4">
+                  <Badge variant="outline" className="text-sm sm:text-lg">
                     {winner.employee.kodeAlternatif}
                   </Badge>
-                  <span className="font-semibold">
+                  <span className="font-semibold text-sm sm:text-base">
                     Score:{" "}
                     {parseFloat(winner.score.totalScore || "0").toFixed(4)}
                   </span>
@@ -118,6 +120,7 @@ function ResultsContent({
                           ? "secondary"
                           : "destructive"
                     }
+                    className="text-xs sm:text-sm"
                   >
                     {winner.score.grade === "sangat_baik"
                       ? "Sangat Baik"
@@ -133,109 +136,153 @@ function ResultsContent({
       )}
 
       <Card>
-        <CardHeader>
-          <CardTitle>Tabel Perangkingan Lengkap</CardTitle>
-          <CardDescription>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-base sm:text-lg">
+            Tabel Perangkingan Lengkap
+          </CardTitle>
+          <CardDescription className="text-xs sm:text-sm">
             Hasil perhitungan metode SMART untuk semua karyawan
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px] text-center">Ranking</TableHead>
-                <TableHead>Kode Alternatif</TableHead>
-                <TableHead>Nama Karyawan</TableHead>
-                <TableHead>Departemen</TableHead>
-                <TableHead className="text-center">K1</TableHead>
-                <TableHead className="text-center">K2</TableHead>
-                <TableHead className="text-center">K3</TableHead>
-                <TableHead className="text-center">K4</TableHead>
-                <TableHead className="text-center">Total Score</TableHead>
-                <TableHead className="text-center">Grade</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {scoreList.map(({ score, employee }) => {
-                const gradeVariant = getGradeVariant(score.grade);
-                const gradeLabel = getGradeLabel(score.grade);
+        <CardContent className="p-0 sm:p-6 sm:pt-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[80px] pl-4 text-center sm:w-[100px] sm:pl-0">
+                    Ranking
+                  </TableHead>
+                  <TableHead className="hidden sm:table-cell">Kode</TableHead>
+                  <TableHead>Nama</TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    Departemen
+                  </TableHead>
+                  <TableHead className="hidden text-center lg:table-cell">
+                    K1
+                  </TableHead>
+                  <TableHead className="hidden text-center lg:table-cell">
+                    K2
+                  </TableHead>
+                  <TableHead className="hidden text-center xl:table-cell">
+                    K3
+                  </TableHead>
+                  <TableHead className="hidden text-center xl:table-cell">
+                    K4
+                  </TableHead>
+                  <TableHead className="text-center">Score</TableHead>
+                  <TableHead className="pr-4 text-center sm:pr-0">
+                    Grade
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {scoreList.map(({ score, employee }) => {
+                  const gradeVariant = getGradeVariant(score.grade);
+                  const gradeLabel = getGradeLabel(score.grade);
 
-                return (
-                  <TableRow
-                    key={score.id}
-                    className={score.ranking === 1 ? "bg-yellow-50" : ""}
-                  >
-                    <TableCell className="text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        {getRankIcon(score.ranking || 0)}
-                        <span className="font-bold text-lg">
-                          #{score.ranking}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{employee.kodeAlternatif}</Badge>
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      {employee.namaLengkap}
-                    </TableCell>
-                    <TableCell>{employee.departemen}</TableCell>
-                    <TableCell className="text-center">
-                      {score.k1Score}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {score.k2Score}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {score.k3Score}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {score.k4Score}
-                    </TableCell>
-                    <TableCell className="text-center font-semibold">
-                      {parseFloat(score.totalScore || "0").toFixed(4)}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant={gradeVariant}>{gradeLabel}</Badge>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+                  return (
+                    <TableRow
+                      key={score.id}
+                      className={
+                        score.ranking === 1
+                          ? "bg-yellow-50 dark:bg-yellow-950/20"
+                          : ""
+                      }
+                    >
+                      <TableCell className="pl-4 text-center sm:pl-0">
+                        <div className="flex items-center justify-center gap-1 sm:gap-2">
+                          {getRankIcon(score.ranking || 0)}
+                          <span className="font-bold text-sm sm:text-lg">
+                            #{score.ranking}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">
+                        <Badge variant="outline" className="text-xs">
+                          {employee.kodeAlternatif}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="max-w-[100px] truncate font-medium text-xs sm:max-w-none sm:text-sm">
+                        {employee.namaLengkap}
+                      </TableCell>
+                      <TableCell className="hidden text-xs sm:text-sm md:table-cell">
+                        {employee.departemen}
+                      </TableCell>
+                      <TableCell className="hidden text-center text-xs sm:text-sm lg:table-cell">
+                        {score.k1Score}
+                      </TableCell>
+                      <TableCell className="hidden text-center text-xs sm:text-sm lg:table-cell">
+                        {score.k2Score}
+                      </TableCell>
+                      <TableCell className="hidden text-center text-xs sm:text-sm xl:table-cell">
+                        {score.k3Score}
+                      </TableCell>
+                      <TableCell className="hidden text-center text-xs sm:text-sm xl:table-cell">
+                        {score.k4Score}
+                      </TableCell>
+                      <TableCell className="text-center font-semibold text-xs sm:text-sm">
+                        {parseFloat(score.totalScore || "0").toFixed(4)}
+                      </TableCell>
+                      <TableCell className="pr-4 text-center sm:pr-0">
+                        <Badge
+                          variant={gradeVariant}
+                          className="text-[10px] sm:text-xs"
+                        >
+                          {gradeLabel}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Keterangan</CardTitle>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-base sm:text-lg">Keterangan</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <h4 className="mb-2 font-semibold">Kriteria Penilaian</h4>
-              <ul className="space-y-1 text-muted-foreground text-sm">
+        <CardContent className="p-4 pt-0 sm:p-6 sm:pt-0">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-lg border p-3">
+              <h4 className="mb-2 font-semibold text-xs sm:text-sm">
+                Kriteria Penilaian
+              </h4>
+              <ul className="space-y-1 text-muted-foreground text-xs sm:text-sm">
                 <li>K1 - Kedisiplinan (25%)</li>
                 <li>K2 - Kehadiran (25%)</li>
                 <li>K3 - Prestasi (25%)</li>
                 <li>K4 - Tanggung Jawab (25%)</li>
               </ul>
             </div>
-            <div>
-              <h4 className="mb-2 font-semibold">Kategori Grade</h4>
-              <ul className="space-y-1 text-sm">
-                <li className="flex items-center gap-2">
-                  <Badge variant="default">Sangat Baik</Badge>
+            <div className="rounded-lg border p-3">
+              <h4 className="mb-2 font-semibold text-xs sm:text-sm">
+                Kategori Grade
+              </h4>
+              <ul className="space-y-2 text-xs sm:text-sm">
+                <li className="flex flex-wrap items-center gap-2">
+                  <Badge variant="default" className="text-[10px] sm:text-xs">
+                    Sangat Baik
+                  </Badge>
                   <span className="text-muted-foreground">Score ≥ 0.90</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <Badge variant="secondary">Baik</Badge>
+                <li className="flex flex-wrap items-center gap-2">
+                  <Badge variant="secondary" className="text-[10px] sm:text-xs">
+                    Baik
+                  </Badge>
                   <span className="text-muted-foreground">
                     Score 0.75 - 0.89
                   </span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <Badge variant="destructive">Kurang</Badge>
+                <li className="flex flex-wrap items-center gap-2">
+                  <Badge
+                    variant="destructive"
+                    className="text-[10px] sm:text-xs"
+                  >
+                    Kurang
+                  </Badge>
                   <span className="text-muted-foreground">Score &lt; 0.75</span>
                 </li>
               </ul>
@@ -252,12 +299,12 @@ export default async function HasilPage() {
 
   if (!activePeriod) {
     return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="font-bold text-3xl tracking-tight">
+      <div className="space-y-4 sm:space-y-6">
+        <div className="space-y-1">
+          <h1 className="font-bold text-2xl tracking-tight sm:text-3xl">
             Hasil Perangkingan
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm sm:text-base">
             Hasil penentuan karyawan terbaik menggunakan metode SMART
           </p>
         </div>
@@ -273,12 +320,12 @@ export default async function HasilPage() {
 
   if (!hasResults) {
     return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="font-bold text-3xl tracking-tight">
+      <div className="space-y-4 sm:space-y-6">
+        <div className="space-y-1">
+          <h1 className="font-bold text-2xl tracking-tight sm:text-3xl">
             Hasil Perangkingan
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm sm:text-base">
             Hasil penentuan karyawan terbaik menggunakan metode SMART
           </p>
         </div>
@@ -288,12 +335,12 @@ export default async function HasilPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="font-bold text-3xl tracking-tight">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="space-y-1">
+        <h1 className="font-bold text-2xl tracking-tight sm:text-3xl">
           Hasil Perangkingan
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground text-sm sm:text-base">
           Hasil penentuan karyawan terbaik menggunakan metode SMART
         </p>
       </div>

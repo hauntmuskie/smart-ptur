@@ -34,8 +34,8 @@ function ScoreBadge({ scoreValue }: { scoreValue: string | null }) {
   const grade = getGradeLabel(parseFloat(scoreValue));
   return (
     <div className="flex flex-col items-center gap-1">
-      <span className="font-semibold">{scoreValue}</span>
-      <Badge variant={grade.variant} className="text-xs">
+      <span className="font-semibold text-xs sm:text-sm">{scoreValue}</span>
+      <Badge variant={grade.variant} className="text-[10px] sm:text-xs">
         {grade.label}
       </Badge>
     </div>
@@ -54,24 +54,30 @@ function EmployeeScoreRow({
 }) {
   return (
     <TableRow>
-      <TableCell>
-        <Badge variant="outline">{emp.kodeAlternatif}</Badge>
+      <TableCell className="pl-4 sm:pl-0">
+        <Badge variant="outline" className="text-xs">
+          {emp.kodeAlternatif}
+        </Badge>
       </TableCell>
-      <TableCell className="font-medium">{emp.namaLengkap}</TableCell>
-      <TableCell>{emp.departemen}</TableCell>
-      <TableCell className="text-center">
+      <TableCell className="max-w-[100px] truncate font-medium text-xs sm:max-w-none sm:text-sm">
+        {emp.namaLengkap}
+      </TableCell>
+      <TableCell className="hidden text-xs sm:text-sm md:table-cell">
+        {emp.departemen}
+      </TableCell>
+      <TableCell className="hidden text-center sm:table-cell">
         <ScoreBadge scoreValue={empScore?.k1Score ?? null} />
       </TableCell>
-      <TableCell className="text-center">
+      <TableCell className="hidden text-center sm:table-cell">
         <ScoreBadge scoreValue={empScore?.k2Score ?? null} />
       </TableCell>
-      <TableCell className="text-center">
+      <TableCell className="hidden text-center lg:table-cell">
         <ScoreBadge scoreValue={empScore?.k3Score ?? null} />
       </TableCell>
-      <TableCell className="text-center">
+      <TableCell className="hidden text-center lg:table-cell">
         <ScoreBadge scoreValue={empScore?.k4Score ?? null} />
       </TableCell>
-      <TableCell className="text-center">
+      <TableCell className="pr-4 text-center sm:pr-0">
         <ScoreForm
           employee={emp}
           periodId={activePeriodId}
@@ -89,13 +95,13 @@ export default async function PembobotanPage() {
   const scoreMap = new Map(scoreList.map((s) => [s.employeeId, s]));
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-bold text-3xl tracking-tight">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-1">
+          <h1 className="font-bold text-2xl tracking-tight sm:text-3xl">
             Pembobotan Kriteria
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm sm:text-base">
             Input nilai kriteria untuk setiap karyawan
           </p>
         </div>
@@ -105,7 +111,7 @@ export default async function PembobotanPage() {
       {!activePeriod ? (
         <Card>
           <CardContent className="py-8">
-            <p className="text-center text-muted-foreground">
+            <p className="text-center text-muted-foreground text-sm">
               Belum ada periode aktif. Silakan buat periode baru terlebih
               dahulu.
             </p>
@@ -114,64 +120,91 @@ export default async function PembobotanPage() {
       ) : (
         <>
           <Card>
-            <CardHeader>
-              <CardTitle>Periode Aktif</CardTitle>
-              <CardDescription>
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-base sm:text-lg">
+                Periode Aktif
+              </CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 {activePeriod.name} ({activePeriod.bulan}/{activePeriod.tahun})
               </CardDescription>
             </CardHeader>
           </Card>
 
           <Card>
-            <CardHeader>
-              <CardTitle>Tabel Nilai Bobot Kriteria</CardTitle>
-              <CardDescription>
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-base sm:text-lg">
+                Tabel Nilai Bobot Kriteria
+              </CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 Skala penilaian: Sangat Baik (90-100), Baik (75-89), Kurang
                 (&lt;75)
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[80px]">Kode</TableHead>
-                    <TableHead>Nama Alternatif</TableHead>
-                    <TableHead>Departemen</TableHead>
-                    {criteriaList.map((c) => (
-                      <TableHead key={c.id} className="text-center">
-                        {c.kode}
-                        <br />
-                        <span className="font-normal text-muted-foreground text-xs">
-                          {c.nama}
-                        </span>
-                      </TableHead>
-                    ))}
-                    <TableHead className="text-center">Aksi</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {employeeList.length === 0 ? (
+            <CardContent className="p-0 sm:p-6 sm:pt-0">
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
                     <TableRow>
-                      <TableCell
-                        colSpan={4 + criteriaList.length}
-                        className="py-8 text-center"
-                      >
-                        Belum ada data karyawan
-                      </TableCell>
+                      <TableHead className="w-[80px] pl-4 sm:pl-0">
+                        Kode
+                      </TableHead>
+                      <TableHead>Nama</TableHead>
+                      <TableHead className="hidden md:table-cell">
+                        Departemen
+                      </TableHead>
+                      {criteriaList.slice(0, 2).map((c) => (
+                        <TableHead
+                          key={c.id}
+                          className="hidden text-center sm:table-cell"
+                        >
+                          <span className="text-xs sm:text-sm">{c.kode}</span>
+                          <br />
+                          <span className="font-normal text-[10px] text-muted-foreground sm:text-xs">
+                            {c.nama}
+                          </span>
+                        </TableHead>
+                      ))}
+                      {criteriaList.slice(2).map((c) => (
+                        <TableHead
+                          key={c.id}
+                          className="hidden text-center lg:table-cell"
+                        >
+                          <span className="text-xs sm:text-sm">{c.kode}</span>
+                          <br />
+                          <span className="font-normal text-[10px] text-muted-foreground sm:text-xs">
+                            {c.nama}
+                          </span>
+                        </TableHead>
+                      ))}
+                      <TableHead className="pr-4 text-center sm:pr-0">
+                        Aksi
+                      </TableHead>
                     </TableRow>
-                  ) : (
-                    employeeList.map((emp) => (
-                      <EmployeeScoreRow
-                        key={emp.id}
-                        emp={emp}
-                        empScore={scoreMap.get(emp.id)}
-                        criteriaList={criteriaList}
-                        activePeriodId={activePeriod.id}
-                      />
-                    ))
-                  )}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {employeeList.length === 0 ? (
+                      <TableRow>
+                        <TableCell
+                          colSpan={4 + criteriaList.length}
+                          className="py-8 text-center text-sm"
+                        >
+                          Belum ada data karyawan
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      employeeList.map((emp) => (
+                        <EmployeeScoreRow
+                          key={emp.id}
+                          emp={emp}
+                          empScore={scoreMap.get(emp.id)}
+                          criteriaList={criteriaList}
+                          activePeriodId={activePeriod.id}
+                        />
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
             </CardContent>
           </Card>
         </>

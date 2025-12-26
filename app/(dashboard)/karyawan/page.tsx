@@ -16,11 +16,13 @@ export default async function KaryawanPage() {
   const employeeList = await getEmployees();
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-bold text-3xl tracking-tight">Data Karyawan</h1>
-          <p className="text-muted-foreground">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-1">
+          <h1 className="font-bold text-2xl tracking-tight sm:text-3xl">
+            Data Karyawan
+          </h1>
+          <p className="text-muted-foreground text-sm sm:text-base">
             Kelola data karyawan Penerbit Erlangga
           </p>
         </div>
@@ -28,78 +30,108 @@ export default async function KaryawanPage() {
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Tabel Data Karyawan</CardTitle>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-base sm:text-lg">
+            Tabel Data Karyawan
+          </CardTitle>
         </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[50px]">No</TableHead>
-                <TableHead>Kode</TableHead>
-                <TableHead>Nama Lengkap</TableHead>
-                <TableHead>NIK</TableHead>
-                <TableHead>Barcode</TableHead>
-                <TableHead>Jenis Kelamin</TableHead>
-                <TableHead>Departemen</TableHead>
-                <TableHead>Jabatan</TableHead>
-                <TableHead>Tgl Bergabung</TableHead>
-                <TableHead className="text-right">Aksi</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {employeeList.length === 0 ? (
+        <CardContent className="p-0 sm:p-6 sm:pt-0">
+          <div className="mx-0 overflow-x-auto">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={10} className="py-8 text-center">
-                    Belum ada data karyawan
-                  </TableCell>
+                  <TableHead className="w-[50px] pl-4 sm:pl-0">No</TableHead>
+                  <TableHead>Kode</TableHead>
+                  <TableHead>Nama Lengkap</TableHead>
+                  <TableHead className="hidden lg:table-cell">NIK</TableHead>
+                  <TableHead className="hidden xl:table-cell">
+                    Barcode
+                  </TableHead>
+                  <TableHead className="hidden sm:table-cell">
+                    Jenis Kelamin
+                  </TableHead>
+                  <TableHead>Departemen</TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    Jabatan
+                  </TableHead>
+                  <TableHead className="hidden lg:table-cell">
+                    Tgl Bergabung
+                  </TableHead>
+                  <TableHead className="pr-4 text-right sm:pr-0">
+                    Aksi
+                  </TableHead>
                 </TableRow>
-              ) : (
-                employeeList.map((employee, index) => (
-                  <TableRow key={employee.id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{employee.kodeAlternatif}</Badge>
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      {employee.namaLengkap}
-                    </TableCell>
-                    <TableCell>{employee.nik}</TableCell>
-                    <TableCell>{employee.barcode || "-"}</TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          employee.jenisKelamin === "L"
-                            ? "default"
-                            : "secondary"
-                        }
-                      >
-                        {employee.jenisKelamin === "L"
-                          ? "Laki-laki"
-                          : "Perempuan"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{employee.departemen}</TableCell>
-                    <TableCell>{employee.jabatan || "-"}</TableCell>
-                    <TableCell>
-                      {employee.tanggalBergabung
-                        ? new Date(
-                            employee.tanggalBergabung,
-                          ).toLocaleDateString("id-ID")
-                        : "-"}
-                    </TableCell>
-                    <TableCell className="space-x-2 text-right">
-                      <EmployeeDialog mode="edit" employee={employee} />
-                      <DeleteEmployeeButton
-                        id={employee.id}
-                        name={employee.namaLengkap}
-                      />
+              </TableHeader>
+              <TableBody>
+                {employeeList.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={10}
+                      className="py-8 text-center text-sm"
+                    >
+                      Belum ada data karyawan
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  employeeList.map((employee, index) => (
+                    <TableRow key={employee.id}>
+                      <TableCell className="pl-4 sm:pl-0">
+                        {index + 1}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="text-xs">
+                          {employee.kodeAlternatif}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="max-w-[120px] truncate font-medium sm:max-w-none">
+                        {employee.namaLengkap}
+                      </TableCell>
+                      <TableCell className="hidden lg:table-cell">
+                        {employee.nik}
+                      </TableCell>
+                      <TableCell className="hidden xl:table-cell">
+                        {employee.barcode || "-"}
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">
+                        <Badge
+                          variant={
+                            employee.jenisKelamin === "L"
+                              ? "default"
+                              : "secondary"
+                          }
+                          className="text-xs"
+                        >
+                          {employee.jenisKelamin === "L" ? "L" : "P"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="max-w-[80px] truncate text-xs sm:max-w-none sm:text-sm">
+                        {employee.departemen}
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        {employee.jabatan || "-"}
+                      </TableCell>
+                      <TableCell className="hidden lg:table-cell">
+                        {employee.tanggalBergabung
+                          ? new Date(
+                              employee.tanggalBergabung,
+                            ).toLocaleDateString("id-ID")
+                          : "-"}
+                      </TableCell>
+                      <TableCell className="pr-4 sm:pr-0">
+                        <div className="flex items-center justify-end gap-1">
+                          <EmployeeDialog mode="edit" employee={employee} />
+                          <DeleteEmployeeButton
+                            id={employee.id}
+                            name={employee.namaLengkap}
+                          />
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>
