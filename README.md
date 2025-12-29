@@ -1,6 +1,6 @@
 # Smart PTUR - Sistem Penilaian Karyawan
 
-Aplikasi web untuk penilaian karyawan terbaik menggunakan metode Weighted Product (WP). Dibangun dengan **Next.js 16**, **React 19**, **Drizzle ORM**, dan **TailwindCSS 4**.
+Aplikasi web untuk penilaian karyawan terbaik menggunakan metode **SMART (Simple Multi-Attribute Rating Technique)**. Dibangun dengan **Next.js 16**, **React 19**, **Drizzle ORM**, dan **TailwindCSS 4**.
 
 ---
 
