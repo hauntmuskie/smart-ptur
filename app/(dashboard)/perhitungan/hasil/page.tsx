@@ -50,24 +50,12 @@ function getGradeVariant(grade: string | null) {
   return "destructive";
 }
 
-function NoPeriodCard() {
+function NoResultsCard() {
   return (
     <Card>
       <CardContent className="py-8">
         <p className="text-center text-muted-foreground text-sm">
-          Belum ada periode evaluasi aktif.
-        </p>
-      </CardContent>
-    </Card>
-  );
-}
-
-function NoResultsCard({ periodName }: { periodName: string }) {
-  return (
-    <Card>
-      <CardContent className="py-8">
-        <p className="text-center text-muted-foreground text-sm">
-          Belum ada hasil perhitungan untuk periode {periodName}.
+          Belum ada hasil perhitungan.
           <br />
           Silakan lakukan proses perhitungan terlebih dahulu.
         </p>
@@ -79,14 +67,12 @@ function NoResultsCard({ periodName }: { periodName: string }) {
 function ResultsContent({
   scoreList,
   winner,
-  activePeriodName,
 }: {
   scoreList: Awaited<ReturnType<typeof getData>>["scoreList"];
   winner:
     | Awaited<ReturnType<typeof getData>>["scoreList"][0]
     | null
     | undefined;
-  activePeriodName: string;
 }) {
   return (
     <>
@@ -95,9 +81,7 @@ function ResultsContent({
           <CardHeader className="p-4 sm:p-6">
             <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
               <Trophy className="size-5 text-yellow-500 sm:size-6" />
-              <span className="truncate">
-                Karyawan Terbaik - {activePeriodName}
-              </span>
+              <span className="truncate">Karyawan Terbaik</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0 sm:p-6 sm:pt-0">
@@ -311,23 +295,7 @@ function ResultsContent({
 }
 
 export default async function HasilPage() {
-  const { activePeriod, scoreList } = await getData();
-
-  if (!activePeriod) {
-    return (
-      <div className="space-y-4 sm:space-y-6">
-        <div className="space-y-1">
-          <h1 className="font-bold text-2xl tracking-tight sm:text-3xl">
-            Hasil Perangkingan
-          </h1>
-          <p className="text-muted-foreground text-sm sm:text-base">
-            Hasil penentuan karyawan terbaik menggunakan metode SMART
-          </p>
-        </div>
-        <NoPeriodCard />
-      </div>
-    );
-  }
+  const { scoreList } = await getData();
 
   const hasResults = scoreList.some((s) => s.score.totalScore);
   const winner = hasResults
@@ -345,7 +313,7 @@ export default async function HasilPage() {
             Hasil penentuan karyawan terbaik menggunakan metode SMART
           </p>
         </div>
-        <NoResultsCard periodName={activePeriod.name} />
+        <NoResultsCard />
       </div>
     );
   }
@@ -360,11 +328,7 @@ export default async function HasilPage() {
           Hasil penentuan karyawan terbaik menggunakan metode SMART
         </p>
       </div>
-      <ResultsContent
-        scoreList={scoreList}
-        winner={winner}
-        activePeriodName={activePeriod.name}
-      />
+      <ResultsContent scoreList={scoreList} winner={winner} />
     </div>
   );
 }

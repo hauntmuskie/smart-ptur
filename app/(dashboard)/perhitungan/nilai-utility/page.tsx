@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { db } from "@/db";
-import { criteria, employees, periods, scores } from "@/db/schema";
+import { criteria, employees, scores } from "@/db/schema";
 
 function formatNumber(value: string | null): string {
   if (!value) return "0";
@@ -25,16 +25,6 @@ function formatNumber(value: string | null): string {
 }
 
 async function getData() {
-  const [activePeriod] = await db
-    .select()
-    .from(periods)
-    .where(eq(periods.status, "active"))
-    .limit(1);
-
-  if (!activePeriod) {
-    return { activePeriod: null, scoreList: [], criteriaList: [] };
-  }
-
   const scoreList = await db
     .select({
       score: scores,
@@ -42,39 +32,15 @@ async function getData() {
     })
     .from(scores)
     .innerJoin(employees, eq(scores.employeeId, employees.id))
-    .where(eq(scores.periodId, activePeriod.id))
     .orderBy(employees.kodeAlternatif);
 
   const criteriaList = await db.select().from(criteria).orderBy(criteria.kode);
 
-  return { activePeriod, scoreList, criteriaList };
+  return { scoreList, criteriaList };
 }
 
 export default async function NilaiUtilityPage() {
-  const { activePeriod, scoreList, criteriaList } = await getData();
-
-  if (!activePeriod) {
-    return (
-      <div className="space-y-4 sm:space-y-6">
-        <div className="space-y-1">
-          <h1 className="font-bold text-2xl tracking-tight sm:text-3xl">
-            Nilai Utility
-          </h1>
-          <p className="text-muted-foreground text-sm sm:text-base">
-            Perhitungan nilai utility untuk setiap kriteria
-          </p>
-        </div>
-        <Card>
-          <CardContent className="py-8">
-            <p className="text-center text-muted-foreground text-sm">
-              Belum ada periode aktif. Silakan buat periode di halaman
-              Pembobotan.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  const { scoreList, criteriaList } = await getData();
 
   const hasCalculation = scoreList.some((s) => s.score.totalScore);
 
@@ -85,7 +51,7 @@ export default async function NilaiUtilityPage() {
           Nilai Utility
         </h1>
         <p className="text-muted-foreground text-sm sm:text-base">
-          Perhitungan nilai utility - Periode: {activePeriod.name}
+          Perhitungan nilai utility untuk setiap kriteria
         </p>
       </div>
 

@@ -115,18 +115,9 @@ async function seed() {
   ]);
   console.log("Created 5 sample employees (C1-C5) from the paper");
 
-  await db.insert(schema.periods).values({
-    name: "Januari 2025",
-    bulan: 1,
-    tahun: 2025,
-    status: "active",
-  });
-  console.log("Created evaluation period: Januari 2025");
-
   await db.insert(schema.scores).values([
     {
       employeeId: 1,
-      periodId: 1,
       k1Score: "75",
       k2Score: "60",
       k3Score: "90",
@@ -135,7 +126,6 @@ async function seed() {
     },
     {
       employeeId: 2,
-      periodId: 1,
       k1Score: "90",
       k2Score: "90",
       k3Score: "85",
@@ -144,7 +134,6 @@ async function seed() {
     },
     {
       employeeId: 3,
-      periodId: 1,
       k1Score: "100",
       k2Score: "90",
       k3Score: "100",
@@ -153,7 +142,6 @@ async function seed() {
     },
     {
       employeeId: 4,
-      periodId: 1,
       k1Score: "90",
       k2Score: "70",
       k3Score: "90",
@@ -162,7 +150,6 @@ async function seed() {
     },
     {
       employeeId: 5,
-      periodId: 1,
       k1Score: "90",
       k2Score: "60",
       k3Score: "60",

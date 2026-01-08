@@ -5,12 +5,9 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/db";
 import { criteria, scores } from "@/db/schema";
 
-export async function runSMARTCalculation(periodId: number) {
+export async function runSMARTCalculation() {
   try {
-    const scoreList = await db
-      .select()
-      .from(scores)
-      .where(eq(scores.periodId, periodId));
+    const scoreList = await db.select().from(scores);
 
     if (scoreList.length === 0) {
       return { success: false, message: "Tidak ada data nilai untuk diproses" };
@@ -87,7 +84,6 @@ export async function runSMARTCalculation(periodId: number) {
     const updatedScores = await db
       .select()
       .from(scores)
-      .where(eq(scores.periodId, periodId))
       .orderBy(scores.totalScore);
 
     const sortedScores = [...updatedScores].sort(

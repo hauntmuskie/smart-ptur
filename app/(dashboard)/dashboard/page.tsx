@@ -1,4 +1,4 @@
-import { Calculator, Scale, Trophy, Users } from "lucide-react";
+import { Scale, Trophy, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getStats } from "./_actions";
 
@@ -16,7 +16,7 @@ export default async function DashboardPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 pb-2 sm:p-6 sm:pb-2">
             <CardTitle className="font-medium text-xs sm:text-sm">
@@ -47,21 +47,6 @@ export default async function DashboardPage() {
             </div>
             <p className="text-[10px] text-muted-foreground sm:text-xs">
               Kriteria penilaian
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 pb-2 sm:p-6 sm:pb-2">
-            <CardTitle className="font-medium text-xs sm:text-sm">
-              Periode Aktif
-            </CardTitle>
-            <Calculator className="hidden size-4 text-muted-foreground sm:block" />
-          </CardHeader>
-          <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
-            <div className="font-bold text-xl sm:text-2xl">{stats.period}</div>
-            <p className="text-[10px] text-muted-foreground sm:text-xs">
-              Periode evaluasi
             </p>
           </CardContent>
         </Card>
@@ -103,10 +88,11 @@ export default async function DashboardPage() {
                 Kriteria Penilaian
               </h4>
               <ul className="mt-2 space-y-1 text-muted-foreground text-xs sm:text-sm">
-                <li>K1 - Kedisiplinan (25%)</li>
-                <li>K2 - Kehadiran (25%)</li>
-                <li>K3 - Prestasi (25%)</li>
-                <li>K4 - Tanggung Jawab (25%)</li>
+                <li>K1 - Kinerja (25%)</li>
+                <li>K2 - Kedisiplinan (25%)</li>
+                <li>K3 - Inisiatif & Kreativitas (20%)</li>
+                <li>K4 - Tanggung Jawab (15%)</li>
+                <li>K5 - Kerja Sama Tim (15%)</li>
               </ul>
             </div>
             <div className="rounded-lg border p-3">
@@ -115,8 +101,9 @@ export default async function DashboardPage() {
               </h4>
               <ul className="mt-2 space-y-1 text-muted-foreground text-xs sm:text-sm">
                 <li>Sangat Baik: 90 - 100</li>
-                <li>Baik: 75 - 89</li>
-                <li>Kurang: &lt; 75</li>
+                <li>Baik: 80 - 89</li>
+                <li>Cukup: 66 - 79</li>
+                <li>Buruk: &lt; 65</li>
               </ul>
             </div>
           </div>

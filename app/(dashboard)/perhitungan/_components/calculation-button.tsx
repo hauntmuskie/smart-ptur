@@ -7,17 +7,13 @@ import { toast } from "sonner";
 import { runSMARTCalculation } from "@/app/_actions/calculation";
 import { Button } from "@/components/ui/button";
 
-interface CalculationButtonProps {
-  periodId: number;
-}
-
-export function CalculationButton({ periodId }: CalculationButtonProps) {
+export function CalculationButton() {
   const [isCalculating, setIsCalculating] = useState(false);
   const router = useRouter();
 
   async function handleCalculate() {
     setIsCalculating(true);
-    const result = await runSMARTCalculation(periodId);
+    const result = await runSMARTCalculation();
     setIsCalculating(false);
 
     if (result.success) {

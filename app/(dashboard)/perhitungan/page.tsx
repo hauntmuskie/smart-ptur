@@ -24,30 +24,7 @@ function formatNumber(value: string | number): string {
 }
 
 export default async function PerhitunganPage() {
-  const { activePeriod, scoreList, criteriaList } = await getData();
-
-  if (!activePeriod) {
-    return (
-      <div className="space-y-4 sm:space-y-6">
-        <div className="space-y-1">
-          <h1 className="font-bold text-2xl tracking-tight sm:text-3xl">
-            Proses Perhitungan
-          </h1>
-          <p className="text-muted-foreground text-sm sm:text-base">
-            Perhitungan metode SMART untuk menentukan karyawan terbaik
-          </p>
-        </div>
-        <Card>
-          <CardContent className="py-8">
-            <p className="text-center text-muted-foreground text-sm">
-              Belum ada periode aktif. Silakan buat periode di halaman
-              Pembobotan.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  const { scoreList, criteriaList } = await getData();
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -57,10 +34,10 @@ export default async function PerhitunganPage() {
             Proses Perhitungan
           </h1>
           <p className="text-muted-foreground text-sm sm:text-base">
-            Perhitungan metode SMART - Periode: {activePeriod.name}
+            Perhitungan metode SMART untuk menentukan karyawan terbaik
           </p>
         </div>
-        <CalculationButton periodId={activePeriod.id} />
+        <CalculationButton />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">

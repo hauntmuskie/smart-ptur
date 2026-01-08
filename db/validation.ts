@@ -4,7 +4,6 @@ import {
   criteria,
   employeeActivities,
   employees,
-  periods,
   scores,
   users,
 } from "./schema";
@@ -67,22 +66,6 @@ export const criteriaFormSchema = z.object({
 export type InsertCriteria = z.infer<typeof insertCriteriaSchema>;
 export type SelectCriteria = z.infer<typeof selectCriteriaSchema>;
 
-export const insertPeriodSchema = createInsertSchema(periods, {
-  name: z.string().min(1, "Nama period wajib diisi"),
-  bulan: z.number().min(1).max(12, "Bulan harus antara 1-12"),
-  tahun: z.number().min(2000).max(2100, "Tahun tidak valid"),
-});
-export const selectPeriodSchema = createSelectSchema(periods);
-
-export const periodFormSchema = z.object({
-  name: z.string().min(1, "Nama periode wajib diisi"),
-  bulan: z.number().min(1).max(12, "Bulan harus antara 1-12"),
-  tahun: z.number().min(2000).max(2100, "Tahun tidak valid"),
-});
-
-export type InsertPeriod = z.infer<typeof insertPeriodSchema>;
-export type SelectPeriod = z.infer<typeof selectPeriodSchema>;
-
 export const insertScoreSchema = createInsertSchema(scores, {
   k1Score: z.string().optional(),
   k2Score: z.string().optional(),
@@ -94,7 +77,6 @@ export const selectScoreSchema = createSelectSchema(scores);
 
 export const scoreFormSchema = z.object({
   employeeId: z.number(),
-  periodId: z.number(),
   k1Score: z.string().min(1, "Nilai K1 wajib diisi"),
   k2Score: z.string().min(1, "Nilai K2 wajib diisi"),
   k3Score: z.string().min(1, "Nilai K3 wajib diisi"),

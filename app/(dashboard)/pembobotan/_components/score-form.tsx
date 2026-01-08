@@ -19,21 +19,16 @@ import type { Employee, Score } from "@/db/schema";
 
 interface ScoreFormProps {
   employee: Employee;
-  periodId: number;
   existingScore?: Score;
 }
 
-export function ScoreForm({
-  employee,
-  periodId,
-  existingScore,
-}: ScoreFormProps) {
+export function ScoreForm({ employee, existingScore }: ScoreFormProps) {
   const [open, setOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
 
   async function handleSubmit(formData: FormData) {
     setIsPending(true);
-    const result = await upsertScore(employee.id, periodId, formData);
+    const result = await upsertScore(employee.id, formData);
     setIsPending(false);
 
     if (result.success) {

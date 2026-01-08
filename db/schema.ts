@@ -46,18 +46,6 @@ export const criteria = mysqlTable("criteria", {
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
 });
 
-export const periods = mysqlTable("periods", {
-  id: int("id").primaryKey().autoincrement(),
-  name: varchar("name", { length: 100 }).notNull(),
-  bulan: int("bulan").notNull(),
-  tahun: int("tahun").notNull(),
-  status: mysqlEnum("status", ["active", "completed", "draft"])
-    .notNull()
-    .default("draft"),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
-});
-
 export const employeeActivities = mysqlTable("employee_activities", {
   id: int("id").primaryKey().autoincrement(),
   employeeId: int("employee_id")
@@ -83,10 +71,8 @@ export const scores = mysqlTable("scores", {
   id: int("id").primaryKey().autoincrement(),
   employeeId: int("employee_id")
     .notNull()
+    .unique()
     .references(() => employees.id, { onDelete: "cascade" }),
-  periodId: int("period_id")
-    .notNull()
-    .references(() => periods.id, { onDelete: "cascade" }),
   k1Score: decimal("k1_score", { precision: 5, scale: 2 }),
   k2Score: decimal("k2_score", { precision: 5, scale: 2 }),
   k3Score: decimal("k3_score", { precision: 5, scale: 2 }),
@@ -124,14 +110,6 @@ export const scoresRelations = relations(scores, ({ one }) => ({
     fields: [scores.employeeId],
     references: [employees.id],
   }),
-  period: one(periods, {
-    fields: [scores.periodId],
-    references: [periods.id],
-  }),
-}));
-
-export const periodsRelations = relations(periods, ({ many }) => ({
-  scores: many(scores),
 }));
 
 export type User = typeof users.$inferSelect;
@@ -140,8 +118,6 @@ export type Employee = typeof employees.$inferSelect;
 export type NewEmployee = typeof employees.$inferInsert;
 export type Criteria = typeof criteria.$inferSelect;
 export type NewCriteria = typeof criteria.$inferInsert;
-export type Period = typeof periods.$inferSelect;
-export type NewPeriod = typeof periods.$inferInsert;
 export type EmployeeActivity = typeof employeeActivities.$inferSelect;
 export type NewEmployeeActivity = typeof employeeActivities.$inferInsert;
 export type Score = typeof scores.$inferSelect;
