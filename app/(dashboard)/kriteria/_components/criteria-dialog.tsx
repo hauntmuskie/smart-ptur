@@ -41,6 +41,12 @@ export function CriteriaDialog({
     initialState,
   );
 
+  function formatNumber(value: string | null | undefined): string {
+    if (!value) return "";
+    const num = Number.parseFloat(value);
+    return num % 1 === 0 ? num.toString() : value;
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -81,8 +87,9 @@ export function CriteriaDialog({
                 id="bobot"
                 name="bobot"
                 type="number"
+                step="1"
                 placeholder="25"
-                defaultValue={criteriaData?.bobot}
+                defaultValue={formatNumber(criteriaData?.bobot)}
               />
               {state.errors?.bobot && (
                 <p className="text-red-500 text-sm">{state.errors.bobot[0]}</p>

@@ -26,6 +26,12 @@ export function ScoreForm({ employee, existingScore }: ScoreFormProps) {
   const [open, setOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
 
+  function formatScoreValue(value: string | null | undefined): string {
+    if (!value) return "";
+    const num = Number.parseFloat(value);
+    return num % 1 === 0 ? num.toString() : value;
+  }
+
   async function handleSubmit(formData: FormData) {
     setIsPending(true);
     const result = await upsertScore(employee.id, formData);
@@ -68,10 +74,11 @@ export function ScoreForm({ employee, existingScore }: ScoreFormProps) {
                 id="k1Score"
                 name="k1Score"
                 type="number"
+                step="1"
                 min="0"
                 max="100"
                 placeholder="0-100"
-                defaultValue={existingScore?.k1Score || ""}
+                defaultValue={formatScoreValue(existingScore?.k1Score)}
               />
             </div>
             <div className="space-y-2">
@@ -80,10 +87,11 @@ export function ScoreForm({ employee, existingScore }: ScoreFormProps) {
                 id="k2Score"
                 name="k2Score"
                 type="number"
+                step="1"
                 min="0"
                 max="100"
                 placeholder="0-100"
-                defaultValue={existingScore?.k2Score || ""}
+                defaultValue={formatScoreValue(existingScore?.k2Score)}
               />
             </div>
           </div>
@@ -96,10 +104,11 @@ export function ScoreForm({ employee, existingScore }: ScoreFormProps) {
                 id="k3Score"
                 name="k3Score"
                 type="number"
+                step="1"
                 min="0"
                 max="100"
                 placeholder="0-100"
-                defaultValue={existingScore?.k3Score || ""}
+                defaultValue={formatScoreValue(existingScore?.k3Score)}
               />
             </div>
             <div className="space-y-2">
@@ -108,10 +117,11 @@ export function ScoreForm({ employee, existingScore }: ScoreFormProps) {
                 id="k4Score"
                 name="k4Score"
                 type="number"
+                step="1"
                 min="0"
                 max="100"
                 placeholder="0-100"
-                defaultValue={existingScore?.k4Score || ""}
+                defaultValue={formatScoreValue(existingScore?.k4Score)}
               />
             </div>
           </div>
@@ -121,10 +131,11 @@ export function ScoreForm({ employee, existingScore }: ScoreFormProps) {
               id="k5Score"
               name="k5Score"
               type="number"
+              step="1"
               min="0"
               max="100"
               placeholder="0-100"
-              defaultValue={existingScore?.k5Score || ""}
+              defaultValue={formatScoreValue(existingScore?.k5Score)}
             />
           </div>
 
