@@ -41,7 +41,6 @@ export default async function KaryawanPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[50px] pl-4 sm:pl-0">No</TableHead>
-                  <TableHead>Kode</TableHead>
                   <TableHead>Nama Lengkap</TableHead>
                   <TableHead className="hidden lg:table-cell">NIK</TableHead>
                   <TableHead className="hidden xl:table-cell">
@@ -65,10 +64,7 @@ export default async function KaryawanPage() {
               <TableBody>
                 {employeeList.length === 0 ? (
                   <TableRow>
-                    <TableCell
-                      colSpan={10}
-                      className="py-8 text-center text-sm"
-                    >
+                    <TableCell colSpan={9} className="py-8 text-center text-sm">
                       Belum ada data karyawan
                     </TableCell>
                   </TableRow>
@@ -77,11 +73,6 @@ export default async function KaryawanPage() {
                     <TableRow key={employee.id}>
                       <TableCell className="pl-4 sm:pl-0">
                         {index + 1}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className="text-xs">
-                          {employee.kodeAlternatif}
-                        </Badge>
                       </TableCell>
                       <TableCell className="max-w-[120px] truncate font-medium sm:max-w-none">
                         {employee.namaLengkap}

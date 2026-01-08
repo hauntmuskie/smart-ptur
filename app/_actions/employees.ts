@@ -1,6 +1,6 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db";
 import { employees } from "@/db/schema";
@@ -8,7 +8,6 @@ import { employeeFormSchema } from "@/db/validation";
 
 export type EmployeeState = {
   errors?: {
-    kodeAlternatif?: string[];
     namaLengkap?: string[];
     nik?: string[];
     barcode?: string[];
@@ -21,12 +20,34 @@ export type EmployeeState = {
   success?: boolean;
 };
 
+async function generateNextKode(): Promise<string> {
+  const [lastEmployee] = await db
+    .select({ kodeAlternatif: employees.kodeAlternatif })
+    .from(employees)
+    .orderBy(desc(employees.id))
+    .limit(1);
+
+  if (!lastEmployee) {
+    return "A1";
+  }
+
+  const match = lastEmployee.kodeAlternatif.match(/^A(\d+)$/);
+  if (match) {
+    const nextNum = Number.parseInt(match[1], 10) + 1;
+    return `A${nextNum}`;
+  }
+
+  const allEmployees = await db
+    .select({ kodeAlternatif: employees.kodeAlternatif })
+    .from(employees);
+  return `A${allEmployees.length + 1}`;
+}
+
 export async function createEmployee(
   _prevState: EmployeeState,
   formData: FormData,
 ): Promise<EmployeeState> {
   const validatedFields = employeeFormSchema.safeParse({
-    kodeAlternatif: formData.get("kodeAlternatif"),
     namaLengkap: formData.get("namaLengkap"),
     nik: formData.get("nik"),
     barcode: formData.get("barcode") || undefined,
@@ -43,7 +64,10 @@ export async function createEmployee(
   }
 
   try {
+    const kodeAlternatif = await generateNextKode();
+
     await db.insert(employees).values({
+      kodeAlternatif,
       ...validatedFields.data,
       tanggalBergabung: validatedFields.data.tanggalBergabung
         ? new Date(validatedFields.data.tanggalBergabung)
@@ -54,7 +78,7 @@ export async function createEmployee(
     return { success: true, message: "Karyawan berhasil ditambahkan" };
   } catch (_error) {
     return {
-      message: "Gagal menambahkan karyawan. NIK atau Kode mungkin sudah ada.",
+      message: "Gagal menambahkan karyawan. NIK mungkin sudah ada.",
     };
   }
 }
@@ -65,7 +89,6 @@ export async function updateEmployee(
   formData: FormData,
 ): Promise<EmployeeState> {
   const validatedFields = employeeFormSchema.safeParse({
-    kodeAlternatif: formData.get("kodeAlternatif"),
     namaLengkap: formData.get("namaLengkap"),
     nik: formData.get("nik"),
     barcode: formData.get("barcode") || undefined,

@@ -1,6 +1,7 @@
 "use client";
 
 import { Calculator } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { runSMARTCalculation } from "@/app/_actions/calculation";
@@ -12,6 +13,7 @@ interface CalculationButtonProps {
 
 export function CalculationButton({ periodId }: CalculationButtonProps) {
   const [isCalculating, setIsCalculating] = useState(false);
+  const router = useRouter();
 
   async function handleCalculate() {
     setIsCalculating(true);
@@ -20,6 +22,7 @@ export function CalculationButton({ periodId }: CalculationButtonProps) {
 
     if (result.success) {
       toast.success(result.message);
+      router.push("/perhitungan/hasil");
     } else {
       toast.error(result.message);
     }

@@ -17,6 +17,12 @@ import {
 } from "@/components/ui/table";
 import { getData } from "./_actions";
 
+function formatNumber(value: string | null): string {
+  if (!value) return "0";
+  const num = Number.parseFloat(value);
+  return num % 1 === 0 ? num.toString() : num.toFixed(2);
+}
+
 function getRankIcon(rank: number) {
   switch (rank) {
     case 1:
@@ -33,12 +39,14 @@ function getRankIcon(rank: number) {
 function getGradeLabel(grade: string | null) {
   if (grade === "sangat_baik") return "Sangat Baik";
   if (grade === "baik") return "Baik";
-  return "Kurang";
+  if (grade === "cukup") return "Cukup";
+  return "Buruk";
 }
 
 function getGradeVariant(grade: string | null) {
   if (grade === "sangat_baik") return "default";
   if (grade === "baik") return "secondary";
+  if (grade === "cukup") return "outline";
   return "destructive";
 }
 
@@ -109,8 +117,7 @@ function ResultsContent({
                     {winner.employee.kodeAlternatif}
                   </Badge>
                   <span className="font-semibold text-sm sm:text-base">
-                    Score:{" "}
-                    {parseFloat(winner.score.totalScore || "0").toFixed(4)}
+                    Score: {formatNumber(winner.score.totalScore)}
                   </span>
                   <Badge
                     variant={
@@ -118,15 +125,13 @@ function ResultsContent({
                         ? "default"
                         : winner.score.grade === "baik"
                           ? "secondary"
-                          : "destructive"
+                          : winner.score.grade === "cukup"
+                            ? "outline"
+                            : "destructive"
                     }
                     className="text-xs sm:text-sm"
                   >
-                    {winner.score.grade === "sangat_baik"
-                      ? "Sangat Baik"
-                      : winner.score.grade === "baik"
-                        ? "Baik"
-                        : "Kurang"}
+                    {getGradeLabel(winner.score.grade)}
                   </Badge>
                 </div>
               </div>
@@ -169,6 +174,9 @@ function ResultsContent({
                   <TableHead className="hidden text-center xl:table-cell">
                     K4
                   </TableHead>
+                  <TableHead className="hidden text-center xl:table-cell">
+                    K5
+                  </TableHead>
                   <TableHead className="text-center">Score</TableHead>
                   <TableHead className="pr-4 text-center sm:pr-0">
                     Grade
@@ -209,19 +217,22 @@ function ResultsContent({
                         {employee.departemen}
                       </TableCell>
                       <TableCell className="hidden text-center text-xs sm:text-sm lg:table-cell">
-                        {score.k1Score}
+                        {formatNumber(score.k1Score)}
                       </TableCell>
                       <TableCell className="hidden text-center text-xs sm:text-sm lg:table-cell">
-                        {score.k2Score}
+                        {formatNumber(score.k2Score)}
                       </TableCell>
                       <TableCell className="hidden text-center text-xs sm:text-sm xl:table-cell">
-                        {score.k3Score}
+                        {formatNumber(score.k3Score)}
                       </TableCell>
                       <TableCell className="hidden text-center text-xs sm:text-sm xl:table-cell">
-                        {score.k4Score}
+                        {formatNumber(score.k4Score)}
+                      </TableCell>
+                      <TableCell className="hidden text-center text-xs sm:text-sm xl:table-cell">
+                        {formatNumber(score.k5Score)}
                       </TableCell>
                       <TableCell className="text-center font-semibold text-xs sm:text-sm">
-                        {parseFloat(score.totalScore || "0").toFixed(4)}
+                        {formatNumber(score.totalScore)}
                       </TableCell>
                       <TableCell className="pr-4 text-center sm:pr-0">
                         <Badge
@@ -251,10 +262,11 @@ function ResultsContent({
                 Kriteria Penilaian
               </h4>
               <ul className="space-y-1 text-muted-foreground text-xs sm:text-sm">
-                <li>K1 - Kedisiplinan (25%)</li>
-                <li>K2 - Kehadiran (25%)</li>
-                <li>K3 - Prestasi (25%)</li>
-                <li>K4 - Tanggung Jawab (25%)</li>
+                <li>K1 - Kinerja (25%)</li>
+                <li>K2 - Kedisiplinan (25%)</li>
+                <li>K3 - Inisiatif & Kreativitas (20%)</li>
+                <li>K4 - Tanggung Jawab (15%)</li>
+                <li>K5 - Kerja Sama Tim (15%)</li>
               </ul>
             </div>
             <div className="rounded-lg border p-3">
@@ -266,24 +278,28 @@ function ResultsContent({
                   <Badge variant="default" className="text-[10px] sm:text-xs">
                     Sangat Baik
                   </Badge>
-                  <span className="text-muted-foreground">Score ≥ 0.90</span>
+                  <span className="text-muted-foreground">Score &gt;= 90</span>
                 </li>
                 <li className="flex flex-wrap items-center gap-2">
                   <Badge variant="secondary" className="text-[10px] sm:text-xs">
                     Baik
                   </Badge>
-                  <span className="text-muted-foreground">
-                    Score 0.75 - 0.89
-                  </span>
+                  <span className="text-muted-foreground">Score 80 - 89</span>
+                </li>
+                <li className="flex flex-wrap items-center gap-2">
+                  <Badge variant="outline" className="text-[10px] sm:text-xs">
+                    Cukup
+                  </Badge>
+                  <span className="text-muted-foreground">Score 66 - 79</span>
                 </li>
                 <li className="flex flex-wrap items-center gap-2">
                   <Badge
                     variant="destructive"
                     className="text-[10px] sm:text-xs"
                   >
-                    Kurang
+                    Buruk
                   </Badge>
-                  <span className="text-muted-foreground">Score &lt; 0.75</span>
+                  <span className="text-muted-foreground">Score &lt; 65</span>
                 </li>
               </ul>
             </div>

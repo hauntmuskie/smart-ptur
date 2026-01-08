@@ -21,20 +21,23 @@ import { ScoreForm } from "./_components/score-form";
 
 function getGradeLabel(score: number): {
   label: string;
-  variant: "default" | "secondary" | "destructive";
+  variant: "default" | "secondary" | "outline" | "destructive";
 } {
   if (score >= 90) return { label: "Sangat Baik", variant: "default" };
-  if (score >= 75) return { label: "Baik", variant: "secondary" };
-  return { label: "Kurang", variant: "destructive" };
+  if (score >= 80) return { label: "Baik", variant: "secondary" };
+  if (score >= 66) return { label: "Cukup", variant: "outline" };
+  return { label: "Buruk", variant: "destructive" };
 }
 
 function ScoreBadge({ scoreValue }: { scoreValue: string | null }) {
   if (!scoreValue) return <>-</>;
 
-  const grade = getGradeLabel(parseFloat(scoreValue));
+  const numValue = Number.parseFloat(scoreValue);
+  const displayValue = numValue % 1 === 0 ? numValue.toString() : scoreValue;
+  const grade = getGradeLabel(numValue);
   return (
     <div className="flex flex-col items-center gap-1">
-      <span className="font-semibold text-xs sm:text-sm">{scoreValue}</span>
+      <span className="font-semibold text-xs sm:text-sm">{displayValue}</span>
       <Badge variant={grade.variant} className="text-[10px] sm:text-xs">
         {grade.label}
       </Badge>
@@ -76,6 +79,9 @@ function EmployeeScoreRow({
       </TableCell>
       <TableCell className="hidden text-center lg:table-cell">
         <ScoreBadge scoreValue={empScore?.k4Score ?? null} />
+      </TableCell>
+      <TableCell className="hidden text-center xl:table-cell">
+        <ScoreBadge scoreValue={empScore?.k5Score ?? null} />
       </TableCell>
       <TableCell className="pr-4 text-center sm:pr-0">
         <ScoreForm
@@ -136,8 +142,8 @@ export default async function PembobotanPage() {
                 Tabel Nilai Bobot Kriteria
               </CardTitle>
               <CardDescription className="text-xs sm:text-sm">
-                Skala penilaian: Sangat Baik (90-100), Baik (75-89), Kurang
-                (&lt;75)
+                Skala penilaian: Sangat Baik (90-100), Baik (80-89), Cukup
+                (66-79), Buruk (&lt;65)
               </CardDescription>
             </CardHeader>
             <CardContent className="p-0 sm:p-6 sm:pt-0">
@@ -164,10 +170,22 @@ export default async function PembobotanPage() {
                           </span>
                         </TableHead>
                       ))}
-                      {criteriaList.slice(2).map((c) => (
+                      {criteriaList.slice(2, 4).map((c) => (
                         <TableHead
                           key={c.id}
                           className="hidden text-center lg:table-cell"
+                        >
+                          <span className="text-xs sm:text-sm">{c.kode}</span>
+                          <br />
+                          <span className="font-normal text-[10px] text-muted-foreground sm:text-xs">
+                            {c.nama}
+                          </span>
+                        </TableHead>
+                      ))}
+                      {criteriaList.slice(4).map((c) => (
+                        <TableHead
+                          key={c.id}
+                          className="hidden text-center xl:table-cell"
                         >
                           <span className="text-xs sm:text-sm">{c.kode}</span>
                           <br />

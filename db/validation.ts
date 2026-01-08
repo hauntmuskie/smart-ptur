@@ -34,9 +34,12 @@ export const insertEmployeeSchema = createInsertSchema(employees, {
 });
 export const selectEmployeeSchema = createSelectSchema(employees);
 
-export const employeeFormSchema = insertEmployeeSchema.extend({
-  tanggalBergabung: z.string().optional(),
-});
+export const employeeFormSchema = insertEmployeeSchema
+  .omit({ kodeAlternatif: true })
+  .extend({
+    kodeAlternatif: z.string().optional(),
+    tanggalBergabung: z.string().optional(),
+  });
 
 export type InsertEmployee = z.infer<typeof insertEmployeeSchema>;
 export type SelectEmployee = z.infer<typeof selectEmployeeSchema>;
@@ -85,6 +88,7 @@ export const insertScoreSchema = createInsertSchema(scores, {
   k2Score: z.string().optional(),
   k3Score: z.string().optional(),
   k4Score: z.string().optional(),
+  k5Score: z.string().optional(),
 });
 export const selectScoreSchema = createSelectSchema(scores);
 
@@ -95,6 +99,7 @@ export const scoreFormSchema = z.object({
   k2Score: z.string().min(1, "Nilai K2 wajib diisi"),
   k3Score: z.string().min(1, "Nilai K3 wajib diisi"),
   k4Score: z.string().min(1, "Nilai K4 wajib diisi"),
+  k5Score: z.string().min(1, "Nilai K5 wajib diisi"),
 });
 
 export type InsertScore = z.infer<typeof insertScoreSchema>;

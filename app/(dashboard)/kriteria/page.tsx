@@ -15,9 +15,15 @@ import { DeleteCriteriaButton } from "./_components/delete-button";
 export default async function KriteriaPage() {
   const criteriaList = await getCriteria();
   const totalBobot = criteriaList.reduce(
-    (sum, c) => sum + parseFloat(c.bobot || "0"),
+    (sum, c) => sum + Number.parseFloat(c.bobot || "0"),
     0,
   );
+
+  function formatNumber(value: string | number): string {
+    const num = typeof value === "string" ? Number.parseFloat(value) : value;
+    if (Number.isNaN(num)) return "0";
+    return num % 1 === 0 ? num.toString() : num.toFixed(2);
+  }
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -75,7 +81,7 @@ export default async function KriteriaPage() {
                           {crit.nama}
                         </TableCell>
                         <TableCell className="text-center font-medium text-xs sm:text-sm">
-                          {crit.bobot}%
+                          {formatNumber(crit.bobot || "0")}%
                         </TableCell>
                         <TableCell className="pr-4 sm:pr-0">
                           <div className="flex items-center justify-end gap-1">
@@ -98,7 +104,7 @@ export default async function KriteriaPage() {
                         Total Bobot
                       </TableCell>
                       <TableCell className="text-center font-semibold text-xs sm:text-sm">
-                        {totalBobot}%
+                        {formatNumber(totalBobot)}%
                       </TableCell>
                       <TableCell />
                     </TableRow>
@@ -149,7 +155,7 @@ export default async function KriteriaPage() {
                           {crit.nama}
                         </TableCell>
                         <TableCell className="pr-4 text-center font-medium text-xs sm:pr-0 sm:text-sm">
-                          {parseFloat(crit.normalisasiBobot || "0").toFixed(2)}
+                          {formatNumber(crit.normalisasiBobot || "0")}
                         </TableCell>
                       </TableRow>
                     ))
@@ -163,13 +169,14 @@ export default async function KriteriaPage() {
                         Total
                       </TableCell>
                       <TableCell className="pr-4 text-center font-semibold text-xs sm:pr-0 sm:text-sm">
-                        {criteriaList
-                          .reduce(
+                        {formatNumber(
+                          criteriaList.reduce(
                             (sum, c) =>
-                              sum + parseFloat(c.normalisasiBobot || "0"),
+                              sum +
+                              Number.parseFloat(c.normalisasiBobot || "0"),
                             0,
-                          )
-                          .toFixed(2)}
+                          ),
+                        )}
                       </TableCell>
                     </TableRow>
                   )}

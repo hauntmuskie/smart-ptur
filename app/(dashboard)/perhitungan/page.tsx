@@ -17,6 +17,12 @@ import {
 import { getData } from "./_actions";
 import { CalculationButton } from "./_components/calculation-button";
 
+function formatNumber(value: string | number): string {
+  const num = typeof value === "string" ? Number.parseFloat(value) : value;
+  if (Number.isNaN(num)) return "0";
+  return num % 1 === 0 ? num.toString() : num.toFixed(2);
+}
+
 export default async function PerhitunganPage() {
   const { activePeriod, scoreList, criteriaList } = await getData();
 
@@ -57,45 +63,39 @@ export default async function PerhitunganPage() {
         <CalculationButton periodId={activePeriod.id} />
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader className="p-4 sm:p-6">
-            <CardTitle className="text-base sm:text-lg">
-              Bobot Kriteria
-            </CardTitle>
-            <CardDescription className="text-xs sm:text-sm">
-              Normalisasi bobot yang digunakan dalam perhitungan
+      <div className="grid gap-4 lg:grid-cols-3">
+        <Card className="lg:col-span-1">
+          <CardHeader className="p-4">
+            <CardTitle className="text-sm">Bobot Kriteria</CardTitle>
+            <CardDescription className="text-xs">
+              Normalisasi bobot perhitungan
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-0 sm:p-6 sm:pt-0">
+          <CardContent className="p-0">
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="pl-4 sm:pl-0">Kode</TableHead>
-                    <TableHead>Kriteria</TableHead>
-                    <TableHead className="text-center">Bobot</TableHead>
-                    <TableHead className="pr-4 text-center sm:pr-0">
-                      Normalisasi
+                    <TableHead className="pl-4 text-xs">Kode</TableHead>
+                    <TableHead className="text-center text-xs">Bobot</TableHead>
+                    <TableHead className="pr-4 text-center text-xs">
+                      Norm
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {criteriaList.map((c) => (
                     <TableRow key={c.id}>
-                      <TableCell className="pl-4 sm:pl-0">
+                      <TableCell className="py-2 pl-4">
                         <Badge variant="outline" className="text-xs">
                           {c.kode}
                         </Badge>
                       </TableCell>
-                      <TableCell className="max-w-[80px] truncate text-xs sm:max-w-none sm:text-sm">
-                        {c.nama}
+                      <TableCell className="py-2 text-center text-xs">
+                        {formatNumber(c.bobot || "0")}%
                       </TableCell>
-                      <TableCell className="text-center text-xs sm:text-sm">
-                        {c.bobot}%
-                      </TableCell>
-                      <TableCell className="pr-4 text-center text-xs sm:pr-0 sm:text-sm">
-                        {parseFloat(c.normalisasiBobot || "0").toFixed(2)}
+                      <TableCell className="py-2 pr-4 text-center text-xs">
+                        {formatNumber(c.normalisasiBobot || "0")}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -105,241 +105,75 @@ export default async function PerhitunganPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="p-4 sm:p-6">
-            <CardTitle className="text-base sm:text-lg">
-              Tahapan Metode SMART
-            </CardTitle>
-            <CardDescription className="text-xs sm:text-sm">
-              Langkah-langkah perhitungan yang dilakukan
+        <Card className="lg:col-span-2">
+          <CardHeader className="p-4">
+            <CardTitle className="text-sm">Tabel Nilai Alternatif</CardTitle>
+            <CardDescription className="text-xs">
+              Data nilai setiap karyawan pada setiap kriteria
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-4 pt-0 sm:p-6 sm:pt-0">
-            <ol className="list-inside list-decimal space-y-2 text-xs sm:text-sm">
-              <li>Menentukan kriteria dan bobot penilaian</li>
-              <li>Normalisasi bobot kriteria (Wj / Sigma Wj)</li>
-              <li>Input nilai setiap alternatif pada setiap kriteria</li>
-              <li>Normalisasi nilai utility setiap kriteria</li>
-              <li>Perhitungan nilai akhir (U = Sigma Wj x Uj)</li>
-              <li>Perangkingan berdasarkan nilai akhir tertinggi</li>
-            </ol>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card>
-        <CardHeader className="p-4 sm:p-6">
-          <CardTitle className="text-base sm:text-lg">
-            Tabel Nilai Alternatif
-          </CardTitle>
-          <CardDescription className="text-xs sm:text-sm">
-            Data nilai mentah setiap karyawan pada setiap kriteria
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-0 sm:p-6 sm:pt-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="pl-4 sm:pl-0">Kode</TableHead>
-                  <TableHead>Nama</TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    Departemen
-                  </TableHead>
-                  <TableHead className="text-center">K1</TableHead>
-                  <TableHead className="text-center">K2</TableHead>
-                  <TableHead className="hidden text-center sm:table-cell">
-                    K3
-                  </TableHead>
-                  <TableHead className="hidden pr-4 text-center sm:table-cell sm:pr-0">
-                    K4
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {scoreList.length === 0 ? (
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
                   <TableRow>
-                    <TableCell colSpan={7} className="py-8 text-center text-sm">
-                      Belum ada data nilai. Silakan input nilai di halaman
-                      Pembobotan.
-                    </TableCell>
+                    <TableHead className="pl-4 text-xs">Kode</TableHead>
+                    <TableHead className="text-xs">Nama</TableHead>
+                    <TableHead className="text-center text-xs">K1</TableHead>
+                    <TableHead className="text-center text-xs">K2</TableHead>
+                    <TableHead className="text-center text-xs">K3</TableHead>
+                    <TableHead className="text-center text-xs">K4</TableHead>
+                    <TableHead className="pr-4 text-center text-xs">
+                      K5
+                    </TableHead>
                   </TableRow>
-                ) : (
-                  scoreList.map(({ score, employee }) => (
-                    <TableRow key={score.id}>
-                      <TableCell className="pl-4 sm:pl-0">
-                        <Badge variant="outline" className="text-xs">
-                          {employee.kodeAlternatif}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="max-w-[80px] truncate font-medium text-xs sm:max-w-none sm:text-sm">
-                        {employee.namaLengkap}
-                      </TableCell>
-                      <TableCell className="hidden text-xs sm:text-sm md:table-cell">
-                        {employee.departemen}
-                      </TableCell>
-                      <TableCell className="text-center text-xs sm:text-sm">
-                        {score.k1Score}
-                      </TableCell>
-                      <TableCell className="text-center text-xs sm:text-sm">
-                        {score.k2Score}
-                      </TableCell>
-                      <TableCell className="hidden text-center text-xs sm:table-cell sm:text-sm">
-                        {score.k3Score}
-                      </TableCell>
-                      <TableCell className="hidden pr-4 text-center text-xs sm:table-cell sm:pr-0 sm:text-sm">
-                        {score.k4Score}
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
-
-      {scoreList.some((s) => s.score.totalScore) && (
-        <>
-          <Card>
-            <CardHeader className="p-4 sm:p-6">
-              <CardTitle className="text-base sm:text-lg">
-                Tabel Normalisasi Nilai
-              </CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
-                Hasil normalisasi nilai (0-1) untuk setiap kriteria
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-0 sm:p-6 sm:pt-0">
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
+                </TableHeader>
+                <TableBody>
+                  {scoreList.length === 0 ? (
                     <TableRow>
-                      <TableHead className="pl-4 sm:pl-0">Kode</TableHead>
-                      <TableHead>Nama</TableHead>
-                      <TableHead className="text-center">K1</TableHead>
-                      <TableHead className="text-center">K2</TableHead>
-                      <TableHead className="hidden text-center sm:table-cell">
-                        K3
-                      </TableHead>
-                      <TableHead className="hidden pr-4 text-center sm:table-cell sm:pr-0">
-                        K4
-                      </TableHead>
+                      <TableCell
+                        colSpan={7}
+                        className="py-8 text-center text-sm"
+                      >
+                        Belum ada data nilai. Silakan input nilai di halaman
+                        Pembobotan.
+                      </TableCell>
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {scoreList.map(({ score, employee }) => (
+                  ) : (
+                    scoreList.map(({ score, employee }) => (
                       <TableRow key={score.id}>
-                        <TableCell className="pl-4 sm:pl-0">
+                        <TableCell className="py-2 pl-4">
                           <Badge variant="outline" className="text-xs">
                             {employee.kodeAlternatif}
                           </Badge>
                         </TableCell>
-                        <TableCell className="max-w-[80px] truncate font-medium text-xs sm:max-w-none sm:text-sm">
+                        <TableCell className="max-w-[100px] truncate py-2 text-xs">
                           {employee.namaLengkap}
                         </TableCell>
-                        <TableCell className="text-center text-xs sm:text-sm">
-                          {parseFloat(score.k1Normalized || "0").toFixed(4)}
+                        <TableCell className="py-2 text-center text-xs">
+                          {formatNumber(score.k1Score || "0")}
                         </TableCell>
-                        <TableCell className="text-center text-xs sm:text-sm">
-                          {parseFloat(score.k2Normalized || "0").toFixed(4)}
+                        <TableCell className="py-2 text-center text-xs">
+                          {formatNumber(score.k2Score || "0")}
                         </TableCell>
-                        <TableCell className="hidden text-center text-xs sm:table-cell sm:text-sm">
-                          {parseFloat(score.k3Normalized || "0").toFixed(4)}
+                        <TableCell className="py-2 text-center text-xs">
+                          {formatNumber(score.k3Score || "0")}
                         </TableCell>
-                        <TableCell className="hidden pr-4 text-center text-xs sm:table-cell sm:pr-0 sm:text-sm">
-                          {parseFloat(score.k4Normalized || "0").toFixed(4)}
+                        <TableCell className="py-2 text-center text-xs">
+                          {formatNumber(score.k4Score || "0")}
+                        </TableCell>
+                        <TableCell className="py-2 pr-4 text-center text-xs">
+                          {formatNumber(score.k5Score || "0")}
                         </TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="p-4 sm:p-6">
-              <CardTitle className="text-base sm:text-lg">
-                Hasil Perhitungan SMART
-              </CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
-                Nilai akhir dan peringkat karyawan
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-0 sm:p-6 sm:pt-0">
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="pl-4 text-center sm:pl-0">
-                        Rank
-                      </TableHead>
-                      <TableHead className="hidden sm:table-cell">
-                        Kode
-                      </TableHead>
-                      <TableHead>Nama</TableHead>
-                      <TableHead className="hidden md:table-cell">
-                        Departemen
-                      </TableHead>
-                      <TableHead className="text-center">Score</TableHead>
-                      <TableHead className="pr-4 text-center sm:pr-0">
-                        Grade
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {[...scoreList]
-                      .sort(
-                        (a, b) =>
-                          (a.score.ranking || 0) - (b.score.ranking || 0),
-                      )
-                      .map(({ score, employee }) => (
-                        <TableRow key={score.id}>
-                          <TableCell className="pl-4 text-center font-bold text-xs sm:pl-0 sm:text-sm">
-                            #{score.ranking}
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Badge variant="outline" className="text-xs">
-                              {employee.kodeAlternatif}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="max-w-[80px] truncate font-medium text-xs sm:max-w-none sm:text-sm">
-                            {employee.namaLengkap}
-                          </TableCell>
-                          <TableCell className="hidden text-xs sm:text-sm md:table-cell">
-                            {employee.departemen}
-                          </TableCell>
-                          <TableCell className="text-center font-semibold text-xs sm:text-sm">
-                            {parseFloat(score.totalScore || "0").toFixed(4)}
-                          </TableCell>
-                          <TableCell className="pr-4 text-center sm:pr-0">
-                            <Badge
-                              variant={
-                                score.grade === "sangat_baik"
-                                  ? "default"
-                                  : score.grade === "baik"
-                                    ? "secondary"
-                                    : "destructive"
-                              }
-                              className="text-[10px] sm:text-xs"
-                            >
-                              {score.grade === "sangat_baik"
-                                ? "Sangat Baik"
-                                : score.grade === "baik"
-                                  ? "Baik"
-                                  : "Kurang"}
-                            </Badge>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-          </Card>
-        </>
-      )}
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

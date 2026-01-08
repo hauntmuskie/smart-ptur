@@ -18,144 +18,161 @@ async function seed() {
   await db.insert(schema.criteria).values([
     {
       kode: "K1",
-      nama: "Disiplin",
+      nama: "Kinerja",
       bobot: "25",
       normalisasiBobot: "0.25",
       keterangan:
-        "Penilaian kedisiplinan karyawan berdasarkan kepatuhan terhadap aturan dan waktu kerja",
+        "Kemampuan karyawan dalam menyelesaikan tugas sesuai target yang telah ditetapkan perusahaan. Penilaian mencakup kualitas hasil kerja, kuantitas pekerjaan, serta ketepatan waktu penyelesaian.",
     },
     {
       kode: "K2",
-      nama: "Kehadiran",
+      nama: "Kedisiplinan",
       bobot: "25",
       normalisasiBobot: "0.25",
       keterangan:
-        "Penilaian tingkat kehadiran karyawan selama periode evaluasi",
+        "Tingkat kepatuhan karyawan terhadap peraturan dan kebijakan perusahaan. Meliputi kehadiran, ketepatan waktu masuk dan pulang kerja, serta kepatuhan terhadap operasional prosedur.",
     },
     {
       kode: "K3",
-      nama: "Prestasi",
-      bobot: "25",
-      normalisasiBobot: "0.25",
+      nama: "Inisiatif & Kreativitas",
+      bobot: "20",
+      normalisasiBobot: "0.20",
       keterangan:
-        "Penilaian pencapaian target dan kualitas hasil kerja karyawan",
+        "Kemampuan karyawan dalam mengemukakan ide baru serta solusi inovatif terhadap permasalahan kerja. Mencerminkan keaktifan dan daya pikir kreatif karyawan.",
     },
     {
       kode: "K4",
       nama: "Tanggung Jawab",
-      bobot: "25",
-      normalisasiBobot: "0.25",
+      bobot: "15",
+      normalisasiBobot: "0.15",
       keterangan:
-        "Penilaian tingkat tanggung jawab karyawan dalam melaksanakan tugas",
+        "Sejauh mana karyawan mampu melaksanakan tugas dan kewajibannya dengan baik serta menyelesaikan pekerjaan sesuai dengan standar yang telah ditetapkan.",
+    },
+    {
+      kode: "K5",
+      nama: "Kerja Sama Tim",
+      bobot: "15",
+      normalisasiBobot: "0.15",
+      keterangan:
+        "Kemampuan karyawan dalam bekerja sama dengan sesama rekan kerja, atasan, maupun dengan orang lain di lingkungan perusahaan.",
     },
   ]);
-  console.log("Created 4 default criteria (K1-K4) with equal weights (25%)");
+  console.log(
+    "Created 5 default criteria (K1-K5) with weights: K1=25%, K2=25%, K3=20%, K4=15%, K5=15%",
+  );
 
   await db.insert(schema.employees).values([
     {
       kodeAlternatif: "C1",
-      namaLengkap: "Hertia Dwi Ais",
+      namaLengkap: "Nofrianto",
       nik: "ERL001",
       barcode: "BC001",
-      jenisKelamin: "P",
-      departemen: "Marketing",
-      jabatan: "Staff Marketing",
+      jenisKelamin: "L",
+      departemen: "Penerbit Erlangga",
+      jabatan: "Staff",
       tanggalBergabung: new Date("2023-01-15"),
     },
     {
       kodeAlternatif: "C2",
-      namaLengkap: "Agnis Fadhillah",
+      namaLengkap: "Ayu Wardhani",
       nik: "ERL002",
       barcode: "BC002",
       jenisKelamin: "P",
-      departemen: "Purchasing",
-      jabatan: "Staff Purchasing",
+      departemen: "Penerbit Erlangga",
+      jabatan: "Staff",
       tanggalBergabung: new Date("2022-06-01"),
     },
     {
       kodeAlternatif: "C3",
-      namaLengkap: "Ayu Wardani",
+      namaLengkap: "Hertia Dwi Ais",
       nik: "ERL003",
       barcode: "BC003",
       jenisKelamin: "P",
-      departemen: "HR GA",
-      jabatan: "Staff HR",
+      departemen: "Penerbit Erlangga",
+      jabatan: "Staff",
       tanggalBergabung: new Date("2021-03-10"),
     },
     {
       kodeAlternatif: "C4",
-      namaLengkap: "Shidqii Rizqulloh",
+      namaLengkap: "Cayo Gustiono",
       nik: "ERL004",
       barcode: "BC004",
       jenisKelamin: "L",
-      departemen: "Sales",
-      jabatan: "Staff Sales",
+      departemen: "Penerbit Erlangga",
+      jabatan: "Staff",
       tanggalBergabung: new Date("2023-08-20"),
     },
     {
       kodeAlternatif: "C5",
-      namaLengkap: "Cayo Gustiono",
+      namaLengkap: "Agnis Fadhillah",
       nik: "ERL005",
       barcode: "BC005",
-      jenisKelamin: "L",
-      departemen: "Ekspedisi",
-      jabatan: "Staff Ekspedisi",
+      jenisKelamin: "P",
+      departemen: "Penerbit Erlangga",
+      jabatan: "Staff",
       tanggalBergabung: new Date("2022-11-05"),
     },
   ]);
-  console.log("Created 5 sample employees (C1-C5)");
+  console.log("Created 5 sample employees (C1-C5) from the paper");
 
   await db.insert(schema.periods).values({
-    name: "Oktober 2025",
-    bulan: 10,
+    name: "Januari 2025",
+    bulan: 1,
     tahun: 2025,
     status: "active",
   });
-  console.log("Created evaluation period: Oktober 2025");
+  console.log("Created evaluation period: Januari 2025");
 
   await db.insert(schema.scores).values([
     {
       employeeId: 1,
       periodId: 1,
-      k1Score: "95",
-      k2Score: "85",
-      k3Score: "80",
-      k4Score: "95",
+      k1Score: "75",
+      k2Score: "60",
+      k3Score: "90",
+      k4Score: "100",
+      k5Score: "85",
     },
     {
       employeeId: 2,
       periodId: 1,
-      k1Score: "80",
+      k1Score: "90",
       k2Score: "90",
       k3Score: "85",
-      k4Score: "85",
+      k4Score: "90",
+      k5Score: "85",
     },
     {
       employeeId: 3,
       periodId: 1,
-      k1Score: "95",
-      k2Score: "95",
-      k3Score: "70",
-      k4Score: "95",
+      k1Score: "100",
+      k2Score: "90",
+      k3Score: "100",
+      k4Score: "90",
+      k5Score: "85",
     },
     {
       employeeId: 4,
       periodId: 1,
       k1Score: "90",
-      k2Score: "95",
-      k3Score: "95",
-      k4Score: "95",
+      k2Score: "70",
+      k3Score: "90",
+      k4Score: "90",
+      k5Score: "85",
     },
     {
       employeeId: 5,
       periodId: 1,
-      k1Score: "85",
-      k2Score: "80",
-      k3Score: "80",
-      k4Score: "85",
+      k1Score: "90",
+      k2Score: "60",
+      k3Score: "60",
+      k4Score: "70",
+      k5Score: "85",
     },
   ]);
-  console.log("Created sample scores for all employees");
+  console.log(
+    "Created sample scores for 5 employees (C1-C5) based on the paper",
+  );
 
   console.log("\nSeeding completed successfully!");
   console.log("\nDefault Admin Login:");

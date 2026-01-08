@@ -68,20 +68,6 @@ export function EmployeeDialog({ mode, employee }: EmployeeDialogProps) {
         <Form action={formAction} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="kodeAlternatif">Kode Alternatif</Label>
-              <Input
-                id="kodeAlternatif"
-                name="kodeAlternatif"
-                placeholder="C1"
-                defaultValue={employee?.kodeAlternatif}
-              />
-              {state.errors?.kodeAlternatif && (
-                <p className="text-red-500 text-sm">
-                  {state.errors.kodeAlternatif[0]}
-                </p>
-              )}
-            </div>
-            <div className="space-y-2">
               <Label htmlFor="nik">NIK</Label>
               <Input
                 id="nik"
@@ -92,6 +78,15 @@ export function EmployeeDialog({ mode, employee }: EmployeeDialogProps) {
               {state.errors?.nik && (
                 <p className="text-red-500 text-sm">{state.errors.nik[0]}</p>
               )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="barcode">Barcode</Label>
+              <Input
+                id="barcode"
+                name="barcode"
+                placeholder="BC001"
+                defaultValue={employee?.barcode || ""}
+              />
             </div>
           </div>
 
@@ -108,35 +103,6 @@ export function EmployeeDialog({ mode, employee }: EmployeeDialogProps) {
                 {state.errors.namaLengkap[0]}
               </p>
             )}
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="barcode">Barcode</Label>
-              <Input
-                id="barcode"
-                name="barcode"
-                placeholder="BC001"
-                defaultValue={employee?.barcode || ""}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="jenisKelamin">Jenis Kelamin</Label>
-              <Select name="jenisKelamin" defaultValue={employee?.jenisKelamin}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Pilih jenis kelamin" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="L">Laki-laki</SelectItem>
-                  <SelectItem value="P">Perempuan</SelectItem>
-                </SelectContent>
-              </Select>
-              {state.errors?.jenisKelamin && (
-                <p className="text-red-500 text-sm">
-                  {state.errors.jenisKelamin[0]}
-                </p>
-              )}
-            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -165,16 +131,35 @@ export function EmployeeDialog({ mode, employee }: EmployeeDialogProps) {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="tanggalBergabung">Tanggal Bergabung</Label>
-            <Input
-              id="tanggalBergabung"
-              name="tanggalBergabung"
-              type="date"
-              defaultValue={
-                employee?.tanggalBergabung?.toString().split("T")[0]
-              }
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="jenisKelamin">Jenis Kelamin</Label>
+              <Select name="jenisKelamin" defaultValue={employee?.jenisKelamin}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Pilih jenis kelamin" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="L">Laki-laki</SelectItem>
+                  <SelectItem value="P">Perempuan</SelectItem>
+                </SelectContent>
+              </Select>
+              {state.errors?.jenisKelamin && (
+                <p className="text-red-500 text-sm">
+                  {state.errors.jenisKelamin[0]}
+                </p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="tanggalBergabung">Tanggal Bergabung</Label>
+              <Input
+                id="tanggalBergabung"
+                name="tanggalBergabung"
+                type="date"
+                defaultValue={
+                  employee?.tanggalBergabung?.toString().split("T")[0]
+                }
+              />
+            </div>
           </div>
 
           <div className="flex justify-end gap-2">

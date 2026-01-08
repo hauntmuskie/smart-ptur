@@ -51,7 +51,7 @@ export function ScoreForm({
           {existingScore ? (
             <>
               <Pencil className="mr-1.5 h-4 w-4" />
-              Edit Nilai
+              Ubah
             </>
           ) : (
             <>
@@ -61,14 +61,14 @@ export function ScoreForm({
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>Input Nilai - {employee.namaLengkap}</DialogTitle>
         </DialogHeader>
         <Form action={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="k1Score">K1 - Disiplin (0-100)</Label>
+              <Label htmlFor="k1Score">K1 - Kinerja (0-100)</Label>
               <Input
                 id="k1Score"
                 name="k1Score"
@@ -80,7 +80,7 @@ export function ScoreForm({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="k2Score">K2 - Kehadiran (0-100)</Label>
+              <Label htmlFor="k2Score">K2 - Kedisiplinan (0-100)</Label>
               <Input
                 id="k2Score"
                 name="k2Score"
@@ -94,7 +94,9 @@ export function ScoreForm({
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="k3Score">K3 - Prestasi (0-100)</Label>
+              <Label htmlFor="k3Score">
+                K3 - Inisiatif & Kreativitas (0-100)
+              </Label>
               <Input
                 id="k3Score"
                 name="k3Score"
@@ -118,13 +120,26 @@ export function ScoreForm({
               />
             </div>
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="k5Score">K5 - Kerja Sama Tim (0-100)</Label>
+            <Input
+              id="k5Score"
+              name="k5Score"
+              type="number"
+              min="0"
+              max="100"
+              placeholder="0-100"
+              defaultValue={existingScore?.k5Score || ""}
+            />
+          </div>
 
           <div className="rounded-lg bg-muted p-3 text-sm">
             <p className="font-medium">Skala Penilaian:</p>
             <ul className="mt-1 text-muted-foreground">
               <li>Sangat Baik: 90 - 100</li>
-              <li>Baik: 75 - 89</li>
-              <li>Kurang: &lt; 75</li>
+              <li>Baik: 80 - 89</li>
+              <li>Cukup: 66 - 79</li>
+              <li>Buruk: &lt; 65</li>
             </ul>
           </div>
 
