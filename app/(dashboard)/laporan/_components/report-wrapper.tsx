@@ -2,7 +2,7 @@
 
 import { toPng } from "html-to-image";
 import { jsPDF } from "jspdf";
-import { Download, FileImage } from "lucide-react";
+import { Download } from "lucide-react";
 import { type ReactNode, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -16,33 +16,6 @@ const REPORT_WIDTH = 794;
 export function ReportWrapper({ children, reportTitle }: ReportWrapperProps) {
   const reportRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
-
-  const handleExportPng = async () => {
-    if (!reportRef.current) return;
-
-    setLoading(true);
-    try {
-      const dataUrl = await toPng(reportRef.current, {
-        backgroundColor: "#ffffff",
-        pixelRatio: 2,
-        cacheBust: true,
-        style: {
-          border: "none",
-          boxShadow: "none",
-          margin: "0",
-        },
-      });
-
-      const link = document.createElement("a");
-      link.download = `${reportTitle.toLowerCase().replace(/\s+/g, "-")}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (error) {
-      console.error("Export PNG failed:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleExportPdf = async () => {
     if (!reportRef.current) return;
@@ -121,22 +94,13 @@ export function ReportWrapper({ children, reportTitle }: ReportWrapperProps) {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-end gap-2 print:hidden">
         <Button
-          variant="outline"
-          size="lg"
-          onClick={handleExportPng}
-          disabled={loading}
-        >
-          <FileImage className="mr-2 size-4" />
-          Export PNG
-        </Button>
-        <Button
           variant="default"
           size="lg"
           onClick={handleExportPdf}
           disabled={loading}
         >
           <Download className="mr-2 size-4" />
-          Export PDF
+          Ekspor PDF
         </Button>
       </div>
 
