@@ -4,6 +4,9 @@
     "source.organizeImports.biome": "explicit",
     "source.fixAll.biome": "explicit"
   },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
   "workbench.editor.customLabels.patterns": {
     "**/app/**/{page,layout,index}.{ts,tsx}": "(${dirname})/${filename}.${extname}",
     "**/index.{ts,tsx}": "${dirname}/index.${extname}"

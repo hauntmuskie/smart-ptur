@@ -123,3 +123,65 @@
     @apply bg-background text-foreground;
   }
 }
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: white;
+    color: black;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  .report-content {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+    border: none;
+    box-shadow: none;
+    overflow: visible;
+    transform-origin: top left;
+  }
+
+  .report-content > * {
+    max-width: 100%;
+  }
+
+  .report-content table {
+    width: 100%;
+    max-width: 100%;
+    table-layout: auto;
+    font-size: 8pt;
+    border-collapse: collapse;
+  }
+
+  .report-content th,
+  .report-content td {
+    padding: 2px 3px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    font-size: 8pt;
+  }
+
+  .report-content th {
+    font-size: 8pt;
+    font-weight: 600;
+  }
+}
