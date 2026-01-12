@@ -2,7 +2,7 @@
 
 import { toPng } from "html-to-image";
 import { jsPDF } from "jspdf";
-import { Download, FileImage, Printer } from "lucide-react";
+import { Download, FileImage } from "lucide-react";
 import { type ReactNode, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -26,6 +26,11 @@ export function ReportWrapper({ children, reportTitle }: ReportWrapperProps) {
         backgroundColor: "#ffffff",
         pixelRatio: 2,
         cacheBust: true,
+        style: {
+          border: "none",
+          boxShadow: "none",
+          margin: "0",
+        },
       });
 
       const link = document.createElement("a");
@@ -48,6 +53,11 @@ export function ReportWrapper({ children, reportTitle }: ReportWrapperProps) {
         backgroundColor: "#ffffff",
         pixelRatio: 2,
         cacheBust: true,
+        style: {
+          border: "none",
+          boxShadow: "none",
+          margin: "0",
+        },
       });
 
       const img = new Image();
@@ -107,16 +117,12 @@ export function ReportWrapper({ children, reportTitle }: ReportWrapperProps) {
     }
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-end gap-2 print:hidden">
         <Button
           variant="outline"
-          size="sm"
+          size="lg"
           onClick={handleExportPng}
           disabled={loading}
         >
@@ -124,24 +130,20 @@ export function ReportWrapper({ children, reportTitle }: ReportWrapperProps) {
           Export PNG
         </Button>
         <Button
-          variant="outline"
-          size="sm"
+          variant="default"
+          size="lg"
           onClick={handleExportPdf}
           disabled={loading}
         >
           <Download className="mr-2 size-4" />
           Export PDF
         </Button>
-        <Button variant="default" size="sm" onClick={handlePrint}>
-          <Printer className="mr-2 size-4" />
-          Print
-        </Button>
       </div>
 
       <div className="mx-auto flex justify-center">
         <div
           ref={reportRef}
-          className="report-content border shadow-sm print:w-full print:max-w-full print:border-none print:p-0 print:shadow-none"
+          className="report-content border shadow-sm print:border-none print:p-0 print:shadow-none"
           style={{
             backgroundColor: "#ffffff",
             color: "#000000",

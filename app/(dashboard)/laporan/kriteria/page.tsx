@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import { criteria } from "@/db/schema";
+import { ReportBackButton } from "../_components/report-back-button";
 import { ReportContentLayout } from "../_components/report-content-layout";
 import { ReportHeader } from "../_components/report-header";
 import { ReportSignature } from "../_components/report-signature";
@@ -26,6 +27,7 @@ export default async function LaporanKriteriaPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="space-y-1 print:hidden">
+        <ReportBackButton />
         <h1 className="font-bold text-2xl tracking-tight sm:text-3xl">
           Laporan Data Kriteria
         </h1>
@@ -127,25 +129,6 @@ export default async function LaporanKriteriaPage() {
               </tbody>
             </table>
           </div>
-
-          {criteriaList.length > 0 && (
-            <div className="mt-6">
-              <h3 className="mb-3 font-semibold text-[#1a365d]">
-                Keterangan Kriteria
-              </h3>
-              <div className="space-y-2 text-sm">
-                {criteriaList.map((crit) => (
-                  <div key={crit.id} className="flex gap-2">
-                    <span className="font-medium">{crit.kode}:</span>
-                    <span>
-                      {crit.nama}
-                      {crit.keterangan && ` - ${crit.keterangan}`}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </ReportContentLayout>
       </ReportWrapperClient>
     </div>

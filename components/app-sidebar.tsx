@@ -30,6 +30,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
+import PenerbitErlanggaLogo from "@/public/penerbit-erlangga-cropped.png";
+
 const menuItems = [
   {
     title: "Dashboard",
@@ -88,17 +90,14 @@ export function AppSidebar() {
       <SidebarHeader className="border-b px-4 py-3">
         <div className="flex flex-col items-center gap-1">
           <Image
-            src="/penerbit-erlangga.png"
+            src={PenerbitErlanggaLogo}
             alt="Penerbit Erlangga"
-            width={100}
-            height={50}
+            width={500}
+            height={500}
             className="h-auto w-auto"
             quality={100}
             priority
           />
-          <span className="font-semibold text-[10px] text-muted-foreground">
-            SPK SMART
-          </span>
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -109,9 +108,13 @@ export function AppSidebar() {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={pathname === item.url}>
-                    <Link href={item.url} onClick={handleLinkClick}>
+                    <Link
+                      href={item.url}
+                      onClick={handleLinkClick}
+                      className="my-1 p-2 *:text-lg"
+                    >
                       <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
+                      <span className="p-1 font-medium">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { employees, scores } from "@/db/schema";
+import { ReportBackButton } from "../_components/report-back-button";
 import { ReportContentLayout } from "../_components/report-content-layout";
 import { ReportHeader } from "../_components/report-header";
 import { ReportSignature } from "../_components/report-signature";
@@ -42,6 +43,7 @@ export default async function LaporanHasilPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="space-y-1 print:hidden">
+        <ReportBackButton />
         <h1 className="font-bold text-2xl tracking-tight sm:text-3xl">
           Laporan Nilai Akhir
         </h1>
@@ -155,25 +157,6 @@ export default async function LaporanHasilPage() {
                 )}
               </tbody>
             </table>
-          </div>
-
-          <div className="mt-6">
-            <h3 className="mb-3 font-semibold text-[#1a365d]">Keterangan</h3>
-            <div className="space-y-1 text-sm">
-              <p>
-                <span className="font-medium">Sangat Baik:</span> Score {">="}{" "}
-                90
-              </p>
-              <p>
-                <span className="font-medium">Baik:</span> Score 80 - 89
-              </p>
-              <p>
-                <span className="font-medium">Cukup:</span> Score 66 - 79
-              </p>
-              <p>
-                <span className="font-medium">Buruk:</span> Score {"<"} 65
-              </p>
-            </div>
           </div>
         </ReportContentLayout>
       </ReportWrapperClient>

@@ -140,12 +140,51 @@
     color: black;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    overflow: visible;
   }
 
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
+  * {
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  /* Preserve borders for report elements that need them */
+  .report-content table,
+  .report-content th,
+  .report-content td,
+  .report-content [class*="border-b"],
+  .report-content [class*="border-t"],
+  .report-content [class*="border-l"],
+  .report-content [class*="border-r"],
+  .report-content [class*="border-x"],
+  .report-content [class*="border-y"],
+  .report-content [class*="border-all"] {
+    border-color: black;
+    border-style: solid;
+  }
+
+  /* Hide UI elements */
+  .print\:hidden,
+  header,
+  nav,
+  aside,
+  [data-slot="sidebar-wrapper"],
+  [data-slot="sidebar-inset"] > *:not(main),
+  .mobile-header {
+    display: none;
+  }
+
+  [data-slot="sidebar-inset"] {
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  main {
+    padding: 0;
+    margin: 0;
   }
 
   .report-content {
@@ -156,32 +195,11 @@
     border: none;
     box-shadow: none;
     overflow: visible;
-    transform-origin: top left;
-  }
-
-  .report-content > * {
-    max-width: 100%;
+    transform: none;
   }
 
   .report-content table {
     width: 100%;
-    max-width: 100%;
-    table-layout: auto;
-    font-size: 8pt;
     border-collapse: collapse;
-  }
-
-  .report-content th,
-  .report-content td {
-    padding: 2px 3px;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    hyphens: auto;
-    font-size: 8pt;
-  }
-
-  .report-content th {
-    font-size: 8pt;
-    font-weight: 600;
   }
 }

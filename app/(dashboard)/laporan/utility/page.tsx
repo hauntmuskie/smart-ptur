@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { criteria, employees, scores } from "@/db/schema";
+import { ReportBackButton } from "../_components/report-back-button";
 import { ReportContentLayout } from "../_components/report-content-layout";
 import { ReportHeader } from "../_components/report-header";
 import { ReportSignature } from "../_components/report-signature";
@@ -34,6 +35,7 @@ export default async function LaporanUtilityPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="space-y-1 print:hidden">
+        <ReportBackButton />
         <h1 className="font-bold text-2xl tracking-tight sm:text-3xl">
           Laporan Nilai Utility
         </h1>
